@@ -167,12 +167,22 @@
 
 // export default ChatPage;
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import petronImg from "./petron.jpg";
 import { HiOutlineUpload } from "react-icons/hi";
 import { AiOutlineSend } from "react-icons/ai";
 import { FaSun, FaMoon } from "react-icons/fa";
 import Image from "next/image";
+import { AiOutlineClose } from "react-icons/ai";
+
+import { CiMenuBurger } from "react-icons/ci";
+import useChatGPT from "./hooks/useChatGpt";
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
+
+if (typeof window !== "undefined") {
+  console.log("pdfjs.version", pdfjs?.version);
+  pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+}
 
 function ServiceModal({ isOpen, onClose }) {
   if (!isOpen) {
@@ -235,12 +245,82 @@ function ServiceModal({ isOpen, onClose }) {
   );
 }
 
-function MyInput({ isDark }: any) {
+function MyInput({ isDark, handleUpload }: any) {
   const [inputValue, setInputValue] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [file, setFile] = useState(null);
+  const [text, setText] = useState("");
+  // const canvasRef = useRef(null);
+
+  // useEffect(() => {
+  //   console.log({ pdfjsLib });
+  //   pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.js";
+  // }, []);
 
   const handleInputChange = (event: any) => {
     setInputValue(event.target.value);
   };
+
+  const handleFileChange = (event: any) => {
+    const file = event.target.files[0];
+
+    console.log({ file });
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (file && allowedTypes.includes(file.type)) {
+      setSelectedFile(file);
+      setFile(file);
+      const fileReader = new FileReader();
+
+      fileReader.onload = async () => {
+        const arrayBuffer = fileReader.result;
+        const pdfData = new Uint8Array(arrayBuffer);
+        const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise;
+        console.log({ pages: pdfDocument.numPages });
+
+        let text = "";
+        for (let i = 1; i <= pdfDocument.numPages; i++) {
+          const pdfPage = await pdfDocument.getPage(i);
+          const pageTextContent = await pdfPage.getTextContent();
+          const pageText = pageTextContent.items
+            .map((item) => item.str)
+            .join("");
+          text += pageText;
+        }
+        console.log({ text: JSON.stringify(text) });
+        handleUpload(text);
+        // setPages(newPages);
+      };
+
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      setSelectedFile(null);
+      alert("Please select a PDF, DOC, or DOCX file.");
+    }
+  };
+
+  // const extractTextFromPage = async (page) => {
+  //   const textContent = await page.getTextContent();
+  //   return textContent.items.map((item) => item.str).join("");
+  // };
+
+  // const extractText = async (file: any) => {
+  //   console.log({ pdfjs, file });
+  //   try {
+  //     const pdf = await pdfjs.getDocument(file).promise;
+
+  //     const page = await pdf.getPage(1);
+  //     console.log({ page });
+  //   } catch (e) {
+  //     console.log({ e });
+  //   }
+
+  //   // const viewport = page.getViewport({ scale: 1.5 });
+  // };
 
   const handleSendClick = () => {
     console.log("Send clicked!");
@@ -253,7 +333,7 @@ function MyInput({ isDark }: any) {
   };
 
   return (
-    <div className="relative">
+    <div className="fixed  bottom-10 w-[70%] self-center">
       <input
         type="text"
         className={`w-full ${
@@ -264,16 +344,22 @@ function MyInput({ isDark }: any) {
         onChange={handleInputChange}
       />
       <button
-        className="absolute top-1/2 right-3 transform -translate-y-1/2"
-        onClick={handleUploadClick}
-      >
-        <HiOutlineUpload size={24} color={`${isDark ? "#fff" : "#1F2937"}`} />
-      </button>
-      <button
-        className="absolute top-1/2 right-12 transform -translate-y-1/2"
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
         onClick={handleSendClick}
       >
         <AiOutlineSend size={24} color={`${isDark ? "#fff" : "#1F2937"}`} />
+      </button>
+      <button
+        className="absolute top-1/2 right-20 transform -translate-y-1/2 cursor-pointer"
+        // onClick={handleUploadClick}
+      >
+        <input
+          type="file"
+          accept=".pdf,.doc,.docx"
+          onChange={handleFileChange}
+          className="w-14 absolute -right-4 opacity-0 cursor-pointer"
+        />
+        <HiOutlineUpload size={24} color={`${isDark ? "#fff" : "#1F2937"}`} />
       </button>
     </div>
   );
@@ -308,158 +394,99 @@ const DarkModeToggle = ({ isDarkMode, setToggleDarkMode }: any) => {
   );
 };
 
-function DrawerContent({ darkMode }: any) {
-  // w-1/4
+function DrawerContent({ darkMode, width = "w-1/4" }: any) {
   return (
     <aside
-      className={`border-r ${
+      className={`border-r screen-full ${
         darkMode ? "border-[#444654]" : "border-gray-200"
       } ${
         darkMode ? "bg-[#202123]" : "bg-white"
-      } flex-none w-full p-4 flex flex-col ${darkMode ? "!text-white" : ""}`}
+      } flex-none ${width} p-4 flex flex-col ${darkMode ? "!text-white" : ""}`}
     >
-      <div className="flex items-center">
-        <div className={` rounded-sm`}>
-          <Image
-            src="/resumeAnalyzerminiLogo.png"
-            alt="Avatar"
-            width={100}
-            height={100}
-          />
+      <div className="flex flex-col flex-1">
+        <div className="flex items-center">
+          <div className={` rounded-sm`}>
+            <Image
+              src="/resumeAnalyzerminiLogo.png"
+              alt="Avatar"
+              width={100}
+              height={100}
+            />
+          </div>
+          <div className="ml-4">
+            <p className="font-bold text-lg">Resume Analyzer</p>
+          </div>
         </div>
-        <div className="ml-4">
-          <p className="font-bold text-lg">Resume Analyzer</p>
-        </div>
-      </div>
-      <div
-        className={`flex-grow my-4 border-t border-b ${
-          darkMode ? "border-[#444654]" : "border-gray-200"
-        }`}
-      >
-        <p
-          className={`${
-            !darkMode ? "text-gray-600" : "text-white"
-          } text-sm p-4`}
+        <div
+          className={`flex-grow my-4 border-t ${
+            darkMode ? "border-[#444654]" : "border-gray-200 "
+          }`}
         >
-          Resume Analyzer is a cutting-edge tool that leverages the power of AI
-          to assist recruiters in analyzing resumes 🤖💼. The tool uses ChatGPT
-          3.5, a state-of-the-art language model developed by OpenAI, to provide
-          insightful summaries of candidate resumes 📝🔍.
-          <br />
-          <br />
-          Recruiters can simply upload a candidate's resume to the tool, and
-          within seconds, they will receive a comprehensive analysis of the
-          resume, including key information such as work experience, education,
-          skills, and more 👨‍💼🎓👩‍💼. The tool also highlights any notable
-          achievements or accomplishments mentioned in the resume 🏆🌟.
-          <br />
-          <br />
-          What sets Resume Analyzer apart is its ability to create a summary of
-          the resume that captures the most important information in a concise,
-          easy-to-read format 📊✍️. Recruiters can choose to include this
-          summary in the candidate's PDF file for easy reference or download
-          📄💻.
-          <br />
-          <br />
-          Overall, Resume Analyzer is a game-changer for recruiters looking to
-          streamline their hiring process and make informed decisions about
-          candidates 🚀👨‍💻👩‍💻.
-        </p>
-        <BuyMeACoffee />
-      </div>
-      <div className="flex-none">
-        <div className="flex justify-center py-2">
-          <BuyMeACoffee />
-        </div>
-        <p className="text-[12px]">
-          Copyright © {new Date().getFullYear()} ResumeAnalyzer All Rights
-          Reserved.
-        </p>
-      </div>
-    </aside>
-  );
-}
-
-function Aside({ darkMode }: any) {
-  return (
-    <aside
-      className={`border-r hidden  md:flex ${
-        darkMode ? "border-[#444654]" : "border-gray-200"
-      } ${
-        darkMode ? "bg-[#202123]" : "bg-white"
-      } flex-none w-1/4 p-4  flex-col ${darkMode ? "!text-white" : ""}`}
-    >
-      <div className="flex items-center">
-        <div className={` rounded-sm`}>
-          <Image
-            src="/resumeAnalyzerminiLogo.png"
-            alt="Avatar"
-            width={100}
-            height={100}
-          />
-        </div>
-        <div className="ml-4">
-          <p className="font-bold text-lg">Resume Analyzer</p>
+          <p
+            className={`overflow-y ${
+              !darkMode ? "text-gray-600" : "text-white"
+            } text-sm p-4`}
+          >
+            Resume Analyzer is a cutting-edge tool that leverages the power of
+            AI to assist recruiters in analyzing resumes 🤖💼. The tool uses
+            ChatGPT 3.5, a state-of-the-art language model developed by OpenAI,
+            to provide insightful summaries of candidate resumes 📝🔍.
+            <br />
+            <br />
+            Recruiters can simply upload a candidate's resume to the tool, and
+            within seconds, they will receive a comprehensive analysis of the
+            resume, including key information such as work experience,
+            education, skills, and more 👨‍💼🎓👩‍💼. The tool also highlights any
+            notable achievements or accomplishments mentioned in the resume
+            🏆🌟.
+            <br />
+            <br />
+            What sets Resume Analyzer apart is its ability to create a summary
+            of the resume that captures the most important information in a
+            concise, easy-to-read format 📊✍️. Recruiters can choose to include
+            this summary in the candidate's PDF file for easy reference or
+            download 📄💻.
+            <br />
+            <br />
+            Overall, Resume Analyzer is a game-changer for recruiters looking to
+            streamline their hiring process and make informed decisions about
+            candidates 🚀👨‍💻👩‍💻.
+          </p>
         </div>
       </div>
-      <div
-        className={`flex-grow my-4 border-t border-b ${
-          darkMode ? "border-[#444654]" : "border-gray-200"
-        }`}
-      >
-        <p
+      <div className="flex">
+        1
+        {/* <div
           className={`${
-            !darkMode ? "text-gray-600" : "text-white"
-          } text-sm p-4`}
+            darkMode ? "bg-[#202123]" : "bg-white"
+          } border-t border-gray-200`}
         >
-          Resume Analyzer is a cutting-edge tool that leverages the power of AI
-          to assist recruiters in analyzing resumes 🤖💼. The tool uses ChatGPT
-          3.5, a state-of-the-art language model developed by OpenAI, to provide
-          insightful summaries of candidate resumes 📝🔍.
-          <br />
-          <br />
-          Recruiters can simply upload a candidate's resume to the tool, and
-          within seconds, they will receive a comprehensive analysis of the
-          resume, including key information such as work experience, education,
-          skills, and more 👨‍💼🎓👩‍💼. The tool also highlights any notable
-          achievements or accomplishments mentioned in the resume 🏆🌟.
-          <br />
-          <br />
-          What sets Resume Analyzer apart is its ability to create a summary of
-          the resume that captures the most important information in a concise,
-          easy-to-read format 📊✍️. Recruiters can choose to include this
-          summary in the candidate's PDF file for easy reference or download
-          📄💻.
-          <br />
-          <br />
-          Overall, Resume Analyzer is a game-changer for recruiters looking to
-          streamline their hiring process and make informed decisions about
-          candidates 🚀👨‍💻👩‍💻.
-        </p>
-        <BuyMeACoffee />
+          <div className="flex justify-center">
+            <p className="text-[12px]">
+              Copyright © {new Date().getFullYear()} ResumeAnalyzer All Rights
+              Reserved.
+            </p>
+          </div>
+        </div> */}
       </div>
-      <div className="flex-none hidden md:block">
-        <p className="text-[12px]">
-          Copyright © {new Date().getFullYear()} ResumeAnalyzer All Rights
-          Reserved.
-        </p>
-      </div>
-      <div className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 z-10">
-        <div className="flex justify-center py-2">
-          <p className="font-bold text-lg">Resume Analyzer</p>
-        </div>
-        <div className="flex justify-center py-2">
-          <BuyMeACoffee />
-        </div>
+      {/* <div
+        className={`fixed bottom-0 inset-x-0 ${
+          darkMode ? "bg-[#202123]" : "bg-white"
+        } border-t border-gray-200 z-10`}
+      >
         <div className="flex justify-center py-2">
           <p className="text-[12px]">
             Copyright © {new Date().getFullYear()} ResumeAnalyzer All Rights
             Reserved.
           </p>
         </div>
-      </div>
+      </div> */}
     </aside>
   );
+}
+
+function Aside({ darkMode }: any) {
+  return <DrawerContent darkMode={darkMode} />;
 }
 
 function Messages({ darkMode }: any) {
@@ -473,25 +500,31 @@ function Messages({ darkMode }: any) {
               darkMode ? "bg-[#202123]" : "bg-white"
             } ${darkMode ? "!text-white" : ""}`}
           >
-            <div className="flex ">
+            <div className="flex">
               <div
-                className={`${
+                className={`flex-shrink-0 ${
                   darkMode ? "bg-white" : "bg-[#E5E7EB]"
-                } rounded-full`}
+                } rounded-full h-[50px] w-[50px]`}
               >
                 <Image
                   src="/resumeAnalyzerminiLogo.png"
                   alt="Avatar"
-                  className=" rounded-full"
                   width={50}
                   height={50}
                 />
               </div>
               <div className="ml-4">
-                <p className="text-black-700 text-[1.020rem] ">
+                <p className="text-black-700 text-[1.020rem]">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   Nullam in scelerisque nisi, sit amet commodo quam. Nullam
-                  vitae mollis lorem.
+                  vitae mollis lorem. Lorem ipsum dolor sit amet, consectetur
+                  adipiscing elit. Nullam in scelerisque nisi, sit amet commodo
+                  quam. Nullam vitae mollis lorem. Lorem ipsum dolor sit amet,
+                  consectetur adipiscing elit. Nullam in scelerisque nisi, sit
+                  amet commodo quam. Nullam vitae mollis lorem. Lorem ipsum
+                  dolor sit amet, consectetur adipiscing elit. Nullam in
+                  scelerisque nisi, sit amet commodo quam. Nullam vitae mollis
+                  lorem.
                 </p>
               </div>
             </div>
@@ -504,7 +537,7 @@ function Messages({ darkMode }: any) {
           >
             <div className="flex items-center">
               <div
-                className={`${
+                className={`flex-shrink-0 ${
                   darkMode ? "bg-white" : "bg-[#E5E7EB]"
                 } rounded-sm w-[50px] h-[50px]`}
               >
@@ -615,17 +648,32 @@ const UserAvatar = () => {
   );
 };
 
-const MobileDrawer = ({ drawerOpen, setDrawerOpen }: any) => {
+const MobileDrawer = ({ drawerOpen, setDrawerOpen, darkMode }: any) => {
+  console.log({ setDrawerOpen });
   return (
     <div className={`absolute flex h-screen ${!drawerOpen && "hidden"} w-full`}>
-      {/* Drawer */}
       <div
         className={`${
           drawerOpen ? "translate-x-0" : "-translate-x-full"
         } transition-all duration-300 ease-in-out fixed z-20 h-full w-full bg-white  shadow-lg`}
       >
-        <div className="flex flex-col items-center justify-center h-full">
-          <DrawerContent />
+        <div className="flex flex-col">
+          <div
+            className={`flex-1
+             ${
+               darkMode ? "bg-[#202123]" : "bg-white"
+             } flex justify-end px-6 py-4`}
+          >
+            <button onClick={() => setDrawerOpen(false)}>
+              <AiOutlineClose
+                size={24}
+                color={`${darkMode ? "#fff" : "#1F2937"}`}
+              />
+            </button>
+          </div>
+          <div className="flex flex-col items-center  h-full">
+            <DrawerContent width={"full-width"} darkMode={darkMode} />
+          </div>
         </div>
       </div>
     </div>
@@ -634,6 +682,108 @@ const MobileDrawer = ({ drawerOpen, setDrawerOpen }: any) => {
 
 function ChatPage() {
   const [darkMode, setDarkMode] = useState(false);
+
+  const [messages, setMessages] = useState([
+    {
+      text: "Hello there! I'm MindfulBot, your personal AI-powered chatbot for mental wellness. I'm here to provide evidence-based resources and support for managing stress, anxiety, depression, and more. How can I assist you today?",
+      isUser: false,
+      id: Date.now(),
+      isLoading: false,
+    },
+  ]);
+
+  const [message, setMessage] = useState("");
+  const [delay, setDelay] = useState<any>(0);
+
+  const [editable, setEditable] = useState(true);
+  const [responseCount, setResponseCount] = useState(0);
+
+  // const onContentSizeChange = () => {
+  //   flatListRef.current.scrollToEnd({animated: true});
+  // };
+
+  const { data, isLoading: apiIsLoading, isError, error, ask } = useChatGPT();
+
+  useEffect(() => {
+    console.log({ data });
+  }, [data]);
+
+  const handleUpload = async (text: string) => {
+    await ask([{ role: "user", content: text }]);
+  };
+
+  useEffect(() => {
+    setEditable(delay === 0);
+  }, [delay]);
+
+  useEffect(() => {
+    setEditable(apiIsLoading !== true);
+  }, [apiIsLoading]);
+
+  const handleUserInput = (text: any) => {
+    setMessage(text);
+  };
+
+  useEffect(() => {
+    if (apiIsLoading === true) {
+      setMessages((messages) => [
+        ...messages,
+        {
+          text: "",
+          isUser: false,
+          id: Date.now(),
+          isLoading: true,
+        },
+      ]);
+    } else if (apiIsLoading === false && isError === false && data) {
+      const lastItemId = messages[messages.length - 1].id;
+      const handler = (messages: any) =>
+        messages?.map((message: any) => {
+          if (message.id === lastItemId) {
+            return {
+              text: data,
+              isUser: false,
+              id: Date.now(),
+              isLoading: false,
+            };
+          }
+          return message;
+        });
+      setMessages(handler);
+      const delay = data?.length * 20 + 500;
+      setDelay(delay);
+      setResponseCount((count) => count + 1);
+      try {
+        setTimeout(() => {
+          setDelay(0);
+        }, delay);
+      } catch (e) {}
+    }
+  }, [apiIsLoading, data, isError]);
+
+  const transformer = (data: any) => {
+    const dataPayload = data.map((d: any) => ({
+      role: d.isUser ? "user" : "assistant",
+      content: d.text,
+    }));
+    dataPayload.shift();
+
+    return dataPayload;
+  };
+
+  const handlePress = () => {
+    const newMessage = {
+      text: message,
+      isUser: true,
+      id: Date.now(),
+      isLoading: false,
+    };
+    setMessages((messages) => [...messages, { ...newMessage }]);
+    setMessage("");
+    const messagesPayload = transformer([...messages, { ...newMessage }]);
+
+    // ask(messagesPayload);
+  };
 
   console.log({ darkMode });
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -663,18 +813,19 @@ function ChatPage() {
     // implement logic to send message
   };
 
-  const handleUpload = () => {
-    // implement logic to upload file
-  };
+  // const handleUpload = (e: any) => {
+  //   // implement logic to upload file
+  // };
 
   return (
     <div className={`w-screen h-screen ${darkMode ? "bg-[#444654]" : ""}`}>
       <div className="h-full flex">
         {/* aside */}
-        <Aside darkMode={darkMode} />
+        {!isMobile && <Aside darkMode={darkMode} />}
         <MobileDrawer
           drawerOpen={isDrawerOpen}
-          setIsDrawerOpen={setIsDrawerOpen}
+          setDrawerOpen={setIsDrawerOpen}
+          darkMode={darkMode}
         />
         {/* chat section */}
         <div className="flex-grow flex flex-col">
@@ -683,24 +834,17 @@ function ChatPage() {
               darkMode ? "bg-[#202123]" : "bg-gray-100"
             } justify-between flex flex-row`}
           >
-            <div
-              className={`${isMobile ? "flex" : "hidden"} flex-1 justify-start`}
-            >
+            <div className={` flex-1 justify-start`}>
               <button
-                className="focus:outline-none w-8 h-8"
+                className={` ${
+                  isMobile ? "flex" : "hidden"
+                } focus:outline-none w-8 h-8`}
                 onClick={toggleDrawer}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M21 18H3M21 12H3M21 6H3"></path>
-                </svg>
+                <CiMenuBurger
+                  size={24}
+                  color={`${darkMode ? "#fff" : "#1F2937"}`}
+                />
               </button>
             </div>
             <div className="flex">
@@ -750,7 +894,7 @@ function ChatPage() {
             {/* Chat messages */}
             <Messages darkMode={darkMode} />
             {/* input  */}
-            <MyInput isDark={darkMode} />
+            <MyInput isDark={darkMode} handleUpload={handleUpload} />
           </div>
         </div>
       </div>

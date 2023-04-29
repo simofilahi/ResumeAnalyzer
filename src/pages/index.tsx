@@ -1,5 +1,5 @@
+import Link from "next/link";
 import React from "react";
-// import { Link } from "react-router-dom";
 
 const LandingPage = () => {
   return (
@@ -28,18 +28,20 @@ const LandingPage = () => {
                   alt="Resume Analyzer logo"
                 />
                 <p className="font-sans font-bold text-gray-900 text-2xl">
-                  Resume Analyzer
+                  {/* Resume Analyzer */}
                 </p>
               </a>
               <div className="mt-14">
                 <div className="mt-6 sm:max-w-xl">
                   <h1 className="text-4xl font-black tracking-tight text-gray-900 sm:text-6xl md:text-7xl">
-                    Revolutionize your Resume Screening with AI
+                    {/* Smart Hiring Starts Here. */}
+                    Lorerm
                     <span className="text-primary">.</span>
                   </h1>
                   <h2 className="mt-6 text-lg text-gray-500 sm:text-xl">
-                    Tired of sifting through piles of resumes? Let Resume
-                    Analyzer do the work for you using AI technology.
+                    lorem
+                    {/* Maximize your hiring efficiency with AI-powered resume
+                    analysis and our interactive chat page. */}
                   </h2>
                 </div>
                 <div className="mt-10 space-y-4">
@@ -49,7 +51,7 @@ const LandingPage = () => {
                     data-v-app=""
                     // hydrated=""
                   >
-                    <form className="grid gap-2 grid-cols-1 sm:w-full sm:flex sm:items-center sm:flex-wrap mt-4 sm:max-w-lg">
+                    {/* <form className="grid gap-2 grid-cols-1 sm:w-full sm:flex sm:items-center sm:flex-wrap mt-4 sm:max-w-lg">
                       <label htmlFor="hero-email" className="sr-only">
                         Email address
                       </label>
@@ -59,17 +61,17 @@ const LandingPage = () => {
                         className="block w-full px-5 py-3 text-base text-gray-900 placeholder-gray-500 border border-gray-300 rounded-md shadow-sm focus:border-primary focus:ring-primary focus-visible:ring-primary flex-1"
                         required
                         placeholder="Enter your email..."
-                      />
-                      <div>
-                        <button
-                          //   to=""
-                          className="ui-button ui-button-base ui-button-primary"
-                          type="submit"
-                        >
-                          Submit
-                        </button>
-                      </div>
-                    </form>
+                      /> */}
+                    <div>
+                      <Link
+                        href="/chat"
+                        className="rounded-full bg-black py-[14px] px-32 text-white font-semibold"
+                        type="submit"
+                      >
+                        Try now
+                      </Link>
+                    </div>
+                    {/* </form> */}
                   </div>
                   {/* <script></script>
                 <script type="module" async="">
@@ -99,15 +101,15 @@ const LandingPage = () => {
                 {/* <!-- Social Proofing --><!-- User Review --> */}
                 <div className="mt-6">
                   <div className="inline-flex items-center">
-                    <img
+                    {/* <img
                       src="https://storage.googleapis.com/mixo-files/public/img/avatars/female-12.png"
                       alt="Teresa Lia"
                       className="object-cover inline-block mr-3 border-2 border-primary rounded-full sm:mr-2 h-14 w-14"
-                    />
+                    /> */}
                     <div>
                       <p className="sm:pl-2.5 text-base font-black tracking-tight text-gray-800 sm:text-lg">
-                        “Resume Analyzer has helped us save so much time in our
-                        recruitment process, and the summaries are spot-on.”
+                        {/* “Resume Analyzer has helped us save so much time in our
+                        recruitment process, and the summaries are spot-on.” */}
                       </p>
                       <p className="sm:pl-2.5 text-sm sm:text-base font-bold text-gray-500">
                         Teresa Lia
@@ -183,13 +185,15 @@ const LandingPage = () => {
                 {/* <!-- Feature --> */}
                 <div>
                   <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
-                    Accurate resume summaries
+                    lorem
+                    {/* Accurate resume summaries */}
                     <span className="text-primary">.</span>
                   </h2>
                   <p className="mt-4 text-lg leading-relaxed text-gray-500 sm:text-xl">
-                    Resume Analyzer uses cutting-edge AI technology to provide
+                    lorem
+                    {/* Resume Analyzer uses cutting-edge AI technology to provide
                     accurate and insightful summaries of candidate resumes, so
-                    you can find the best fit for your organization.
+                    you can find the best fit for your organization. */}
                   </p>
                 </div>
                 {/* <!-- CTA --> */}
@@ -199,11 +203,12 @@ const LandingPage = () => {
               {/* <!-- Image --> */}
               <div className="lg:col-start-1 mt-12 sm:mt-16 lg:mt-0">
                 <div className="pr-4 -sm:ml-48 sm:pr-6 md:-ml-16 lg:px-0 lg:m-0 lg:relative lg:h-full lg:flex lg:items-center">
-                  <img
+                  lorem
+                  {/* <img
                     src="https://images.unsplash.com/photo-1423592707957-3b212afa6733?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwzMzczODV8MHwxfHNlYXJjaHw3fHxyZXN1bWV8ZW58MHwwfHx8MTY4Mjc2MDg3MA&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1080"
                     className="lg:right-0 rounded-r-2xl w-full 2xl:max-h-[44rem]"
                     alt="Accurate resume summaries"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -217,10 +222,11 @@ const LandingPage = () => {
                     Time-saving<span className="text-primary">.</span>
                   </h2>
                   <p className="mt-4 text-lg leading-relaxed text-gray-500 sm:text-xl">
-                    Our tool saves you valuable time by automating the
+                    lorem
+                    {/* Our tool saves you valuable time by automating the
                     time-consuming task of resume screening, allowing you to
                     focus on other important aspects of your recruitment
-                    process.
+                    process. */}
                   </p>
                 </div>
                 {/* <!-- CTA --> */}
@@ -248,10 +254,11 @@ const LandingPage = () => {
                     Error-free<span className="text-primary">.</span>
                   </h2>
                   <p className="mt-4 text-lg leading-relaxed text-gray-500 sm:text-xl">
-                    Say goodbye to human errors that occur during manual
+                    lorem
+                    {/* Say goodbye to human errors that occur during manual
                     screening - our AI-powered tool provides error-free
                     screening results, giving you confidence in your hiring
-                    decisions.
+                    decisions. */}
                   </p>
                 </div>
                 {/* <!-- CTA --> */}
@@ -534,8 +541,9 @@ const LandingPage = () => {
                     className="text-3xl font-black tracking-tight text-gray-900 sm:text-4xl md:text-5xl md:leading-tight md:max-w-4xl md:mx-auto"
                     data-v-77b1cd82=""
                   >
-                    Try Resume Analyzer today and streamline your recruitment
-                    process
+                    lorem
+                    {/* Try Resume Analyzer today and streamline your recruitment
+                    process */}
                     <span className="text-primary" data-v-77b1cd82="">
                       .
                     </span>

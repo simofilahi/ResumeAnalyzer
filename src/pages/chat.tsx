@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-// import petronImg from "./petron.jpg";
+
 import { HiOutlineUpload } from "react-icons/hi";
 import { AiOutlineSend } from "react-icons/ai";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon, FaCoffee, FaHeart } from "react-icons/fa";
 import Image from "next/image";
 import { AiOutlineClose } from "react-icons/ai";
 
-import { CiMenuBurger } from "react-icons/ci";
-import useChatGPT from "./hooks/useChatGpt";
+import useChatGPT from "../hooks/useChatGpt";
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
 import { useRef } from "react";
+
+import mammoth from "mammoth";
 
 if (typeof window !== "undefined") {
   console.log("pdfjs.version", pdfjs?.version);
@@ -85,47 +86,75 @@ function MyInput({
   onChange,
   onKeyDown,
 }: any) {
+  const extractFromDoc = async (file: any) => {
+    const result = await mammoth.convertToHtml({
+      arrayBuffer: await file.arrayBuffer(),
+    });
+    const text = result.value.replace(/<\/?[^>]+(>|$)/g, ""); // remove HTML tags
+    console.log(text); // Output the extracted text content
+    console.log({ doc: JSON.stringify(text) });
+    handleUpload(text);
+  };
+
+  const extractTextFromPdf = () => {
+    const fileReader = new FileReader();
+
+    fileReader.onload = async () => {
+      const arrayBuffer = fileReader.result;
+      const pdfData = new Uint8Array(arrayBuffer);
+      const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise;
+      console.log({ pages: pdfDocument.numPages });
+
+      let text = "";
+      for (let i = 1; i <= pdfDocument.numPages; i++) {
+        const pdfPage = await pdfDocument.getPage(i);
+        const pageTextContent = await pdfPage.getTextContent();
+        const pageText = pageTextContent.items.map((item) => item.str).join("");
+        text += pageText;
+      }
+      console.log({ text: JSON.stringify(text) });
+      handleUpload(text);
+      // setPages(newPages);
+    };
+
+    fileReader.readAsArrayBuffer(file);
+  };
+
+  const isDocOrDocx = (file: any) => {
+    const fileName = file.name;
+    const extension = fileName.split(".").pop();
+
+    return extension === "doc" || extension === "docx";
+  };
+
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
 
-    console.log({ file });
+    console.log({ file: file });
     const allowedTypes = [
       "application/pdf",
-      // "application/msword",
-      // "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
 
-    if (file && allowedTypes.includes(file.type)) {
-      const fileReader = new FileReader();
+    if (!file) return;
 
-      fileReader.onload = async () => {
-        const arrayBuffer = fileReader.result;
-        const pdfData = new Uint8Array(arrayBuffer);
-        const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise;
-        console.log({ pages: pdfDocument.numPages });
-
-        let text = "";
-        for (let i = 1; i <= pdfDocument.numPages; i++) {
-          const pdfPage = await pdfDocument.getPage(i);
-          const pageTextContent = await pdfPage.getTextContent();
-          const pageText = pageTextContent.items
-            .map((item) => item.str)
-            .join("");
-          text += pageText;
-        }
-        console.log({ text: JSON.stringify(text) });
-        handleUpload(text);
-        // setPages(newPages);
-      };
-
-      fileReader.readAsArrayBuffer(file);
+    if (file && file.type === "application/pdf") {
+      extractTextFromPdf();
+    } else if (
+      [
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      ].includes(file.type)
+    ) {
+      extractFromDoc(file);
     } else {
       alert("Please select a PDF, DOC, or DOCX file.");
     }
   };
 
   return (
-    <div className="fixed  bottom-10 w-[70%] self-center">
+    <div className="absolute bottom-20 w-[90%] self-center">
       <input
         type="text"
         className={`w-full ${
@@ -199,7 +228,7 @@ function DrawerContent({ darkMode, width = "w-1/4" }: any) {
       <div className="flex items-center">
         <div className={` rounded-sm`}>
           <Image
-            src="/resumeAnalyzerminiLogo.png"
+            src="/resumeAnalyzer.png"
             alt="Avatar"
             width={100}
             height={100}
@@ -250,8 +279,7 @@ function DrawerContent({ darkMode, width = "w-1/4" }: any) {
           darkMode ? "bg-[#202123]" : "bg-white"
         } border-t ${darkMode ? "border-[#444654]" : "border-gray-200"}`}
       >
-        Copyright © {new Date().getFullYear()} ResumeAnalyzer All Rights
-        Reserved.
+        Copyright © {new Date().getFullYear()} All Rights Reserved.
       </div>
     </aside>
   );
@@ -334,7 +362,7 @@ function Messages({ darkMode, messages }: any) {
                     } rounded-full h-[50px] w-[50px]`}
                   >
                     <Image
-                      src="/resumeAnalyzerminiLogo.png"
+                      src="/resumeAnalyzer.png"
                       alt="Avatar"
                       width={50}
                       height={50}
@@ -448,6 +476,35 @@ const MobileDrawer = ({ drawerOpen, setDrawerOpen, darkMode }: any) => {
         </div>
       </div>
     </div>
+  );
+};
+
+const SupportMessage = () => {
+  return (
+    <div className="mx-2 text-white px-[1px]  flex items-center justify-center">
+      <p className="mr-2">Help us by supporting our hosting and AI API costs</p>
+      <FaHeart className="text-red-500" />
+    </div>
+  );
+};
+
+const BuyMeCoffeeButton = () => {
+  return (
+    <a
+      href="https://www.buymeacoffee.com/example"
+      target="_blank"
+      rel="noopener noreferrer"
+      className=" bg-red-500 text-white px-4 mx-4 py-2 flex items-center justify-center rounded-tl-lg hover:bg-red-600 transition-all duration-300"
+    >
+      <SupportMessage />
+      <img
+        src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png"
+        alt="Buy Me A Coffee"
+        height="24"
+        width="108"
+        className="rounded-full "
+      />
+    </a>
   );
 };
 
@@ -597,45 +654,22 @@ function ChatPage() {
     };
   }, []);
 
-  const handleSend = () => {
-    // implement logic to send message
-  };
-
-  // const handleUpload = (e: any) => {
-  //   // implement logic to upload file
-  // };
-
   return (
-    <div className={`w-screen h-screen ${darkMode ? "bg-[#444654]" : ""}`}>
+    <div
+      className={`w-screen h-screen ${
+        darkMode ? "bg-[#202123]" : "bg-[#F3F4F6]"
+      }`}
+    >
       <div className="h-full flex">
-        {/* aside */}
-        {!isMobile && <Aside darkMode={darkMode} />}
-        <MobileDrawer
-          drawerOpen={isDrawerOpen}
-          setDrawerOpen={setIsDrawerOpen}
-          darkMode={darkMode}
-        />
-        {/* chat section */}
-        <div className="flex-grow flex flex-col">
+        <div className="flex-grow flex flex-col max-w-[1400px] ml-auto mr-auto">
           <div
             className={`p-5   ${
               darkMode ? "bg-[#202123]" : "bg-gray-100"
             } justify-between flex flex-row`}
           >
-            <div className={` flex-1 justify-start`}>
-              <button
-                className={` ${
-                  isMobile ? "flex" : "hidden"
-                } focus:outline-none w-8 h-8`}
-                onClick={toggleDrawer}
-              >
-                <CiMenuBurger
-                  size={24}
-                  color={`${darkMode ? "#fff" : "#1F2937"}`}
-                />
-              </button>
-            </div>
-            <div className="flex">
+            <div className={` flex-1 justify-start `}></div>
+            <div className="flex self-end">
+              {/* <BuyMeCoffeeButton /> */}
               <DarkModeToggle
                 isDarkMode={darkMode}
                 setToggleDarkMode={setDarkMode}
@@ -691,6 +725,17 @@ function ChatPage() {
               onKeyDown={handleKeyPress}
             />
           </div>
+        </div>
+        <div
+          className={` fixed w-screen bottom-0 p-4 text-[16px] ${
+            darkMode ? "bg-[#202123]" : "bg-[#F3F4F6]"
+          } border-t ${
+            darkMode ? "border-[#444654]" : "border-gray-200"
+          } flex items-center justify-center ${
+            darkMode ? "text-white" : "text-gray-900"
+          } font-semibold`}
+        >
+          Copyright © {new Date().getFullYear()} All Rights Reserved.
         </div>
       </div>
     </div>

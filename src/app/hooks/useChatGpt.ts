@@ -22,7 +22,7 @@ const useChatGPT = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer `,
+            Authorization: `Bearer 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`,
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",

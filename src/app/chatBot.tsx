@@ -1,172 +1,3 @@
-// import React, { useState } from "react";
-
-// function ChatPage() {
-//   const [showSuggestions, setShowSuggestions] = useState(true);
-//   const [darkMode, setDarkMode] = useState(false);
-//   const [message, setMessage] = useState("");
-
-//   function handleSend() {
-//     // Send the message
-//     setMessage("");
-//   }
-
-//   function handleUpload() {
-//     // Upload file
-//   }
-
-//   function handleDarkModeToggle() {
-//     setDarkMode(!darkMode);
-//   }
-
-//   function handleInputChange(event) {
-//     setMessage(event.target.value);
-//   }
-
-//   return (
-//     <div
-//       className={`flex flex-col h-screen ${
-//         darkMode ? "bg-gray-900 text-white" : "bg-white text-gray-800"
-//       }`}
-//     >
-//       <div className="flex-1 flex">
-//         <div className="flex flex-col w-1/4 p-4">
-//           <div className="flex items-center mb-4">
-//             <img src="logo.png" alt="Logo" className="w-8 h-8 mr-2" />
-//             <span className="text-lg font-semibold">Chat App</span>
-//           </div>
-//           <div className="border-b border-gray-300 mb-4"></div>
-//           <p className="text-gray-500 mb-4">
-//             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-//           </p>
-//           <button
-//             className={`rounded-full w-8 h-8 ${
-//               darkMode ? "bg-gray-800" : "bg-gray-200"
-//             } flex items-center justify-center`}
-//             onClick={handleDarkModeToggle}
-//           >
-//             <svg
-//               xmlns="http://www.w3.org/2000/svg"
-//               fill="none"
-//               viewBox="0 0 24 24"
-//               stroke="currentColor"
-//               className={`w-4 h-4 ${darkMode ? "text-white" : "text-gray-800"}`}
-//             >
-//               {darkMode ? (
-//                 <path
-//                   strokeLinecap="round"
-//                   strokeLinejoin="round"
-//                   strokeWidth="2"
-//                   d="M17.657 6.343a8 8 0 10-11.314 0M12 2v4m0 12v4m6.708-10.708a4 4 0 11-5.656 0M6.343 17.657a8 8 0 000-11.314M15.364 8.636a4 4 0 000 5.656"
-//                 />
-//               ) : (
-//                 <path
-//                   strokeLinecap="round"
-//                   strokeLinejoin="round"
-//                   strokeWidth="2"
-//                   d="M12 6a6 6 0 00-6 6c0 3.314 2.686 6 6 6s6-2.686 6-6a6 6 0 00-6-6z"
-//                 />
-//               )}
-//             </svg>
-//           </button>
-//         </div>
-//         <div className="flex-1 p-4">
-//           {showSuggestions ? (
-//             <div className="flex flex-wrap mb-4">
-//               <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-4">
-//                 <div className="bg-white shadow-sm rounded-lg p-4 text-center">
-//                   <p className="text-gray-800 font-medium mb-2">
-//                     How can I help you?
-//                   </p>
-//                 </div>
-//               </div>
-//               <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-4">
-//                 <div
-//                   className="bg-white shadow-sm
-// rounded-lg p-4 text-center"
-//                 >
-//                   <p className="text-gray-800 font-medium mb-2">
-//                     Do you have any sales?
-//                   </p>
-//                 </div>
-//               </div>
-//               <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-4">
-//                 <div className="bg-white shadow-sm rounded-lg p-4 text-center">
-//                   <p className="text-gray-800 font-medium mb-2">
-//                     What are your hours?
-//                   </p>
-//                 </div>
-//               </div>
-//               <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-4">
-//                 <div className="bg-white shadow-sm rounded-lg p-4 text-center">
-//                   <p className="text-gray-800 font-medium mb-2">
-//                     Can I make a reservation?
-//                   </p>
-//                 </div>
-//               </div>
-//             </div>
-//           ) : null}
-//           <div className="flex flex-col flex-1 mb-4">
-//             <div className="flex-1 overflow-y-scroll py-2">
-//               {/* Chat messages go here */}
-//             </div>
-//             <div className="flex items-center">
-//               <div className="flex-1">
-//                 <input
-//                   type="text"
-//                   className="w-full px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring focus:border-blue-300"
-//                   placeholder="Type a message..."
-//                   value={message}
-//                   onChange={handleInputChange}
-//                 />
-//               </div>
-//               <button
-//                 className="flex-none w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center ml-2"
-//                 onClick={handleSend}
-//               >
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   fill="none"
-//                   viewBox="0 0 24 24"
-//                   stroke="currentColor"
-//                   className="w-6 h-6"
-//                 >
-//                   <path
-//                     strokeLinecap="round"
-//                     strokeLinejoin="round"
-//                     strokeWidth="2"
-//                     d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-//                   />
-//                 </svg>
-//               </button>
-//               <button
-//                 className="flex-none w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center ml-2"
-//                 onClick={handleUpload}
-//               >
-//                 <svg
-//                   xmlns="http://www.w3.org/2000/svg"
-//                   fill="none"
-//                   viewBox="0 0 24 24"
-//                   stroke="currentColor"
-//                   className="w-6 h-6"
-//                 >
-//                   <path
-//                     strokeLinecap="round"
-//                     strokeLinejoin="round"
-//                     strokeWidth="2"
-//                     d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-//                   />
-//                 </svg>
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default ChatPage;
-
 import React, { useEffect, useState } from "react";
 // import petronImg from "./petron.jpg";
 import { HiOutlineUpload } from "react-icons/hi";
@@ -178,6 +9,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { CiMenuBurger } from "react-icons/ci";
 import useChatGPT from "./hooks/useChatGpt";
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
+import { useRef } from "react";
 
 if (typeof window !== "undefined") {
   console.log("pdfjs.version", pdfjs?.version);
@@ -245,35 +77,25 @@ function ServiceModal({ isOpen, onClose }) {
   );
 }
 
-function MyInput({ isDark, handleUpload }: any) {
-  const [inputValue, setInputValue] = useState("");
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [file, setFile] = useState(null);
-  const [text, setText] = useState("");
-  // const canvasRef = useRef(null);
-
-  // useEffect(() => {
-  //   console.log({ pdfjsLib });
-  //   pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.js";
-  // }, []);
-
-  const handleInputChange = (event: any) => {
-    setInputValue(event.target.value);
-  };
-
+function MyInput({
+  isDark,
+  handleUpload,
+  onSendClick,
+  value,
+  onChange,
+  onKeyDown,
+}: any) {
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
 
     console.log({ file });
     const allowedTypes = [
       "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      // "application/msword",
+      // "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
 
     if (file && allowedTypes.includes(file.type)) {
-      setSelectedFile(file);
-      setFile(file);
       const fileReader = new FileReader();
 
       fileReader.onload = async () => {
@@ -298,38 +120,8 @@ function MyInput({ isDark, handleUpload }: any) {
 
       fileReader.readAsArrayBuffer(file);
     } else {
-      setSelectedFile(null);
       alert("Please select a PDF, DOC, or DOCX file.");
     }
-  };
-
-  // const extractTextFromPage = async (page) => {
-  //   const textContent = await page.getTextContent();
-  //   return textContent.items.map((item) => item.str).join("");
-  // };
-
-  // const extractText = async (file: any) => {
-  //   console.log({ pdfjs, file });
-  //   try {
-  //     const pdf = await pdfjs.getDocument(file).promise;
-
-  //     const page = await pdf.getPage(1);
-  //     console.log({ page });
-  //   } catch (e) {
-  //     console.log({ e });
-  //   }
-
-  //   // const viewport = page.getViewport({ scale: 1.5 });
-  // };
-
-  const handleSendClick = () => {
-    console.log("Send clicked!");
-    // Do something with the input value here
-  };
-
-  const handleUploadClick = () => {
-    console.log("Upload clicked!");
-    // Do something with the uploaded file here
   };
 
   return (
@@ -340,12 +132,13 @@ function MyInput({ isDark, handleUpload }: any) {
           isDark ? "bg-[#444654]" : "bg-white"
         }  py-4 pr-10 pl-4 rounded-lg shadow-md outline-none`}
         placeholder="Type your message..."
-        value={inputValue}
-        onChange={handleInputChange}
+        value={value}
+        onChange={onChange}
+        onKeyDown={onKeyDown}
       />
       <button
         className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer"
-        onClick={handleSendClick}
+        onClick={onSendClick}
       >
         <AiOutlineSend size={24} color={`${isDark ? "#fff" : "#1F2937"}`} />
       </button>
@@ -397,200 +190,177 @@ const DarkModeToggle = ({ isDarkMode, setToggleDarkMode }: any) => {
 function DrawerContent({ darkMode, width = "w-1/4" }: any) {
   return (
     <aside
-      className={`border-r screen-full ${
+      className={`border-r h-full relative  overflow-y-scroll   ${
         darkMode ? "border-[#444654]" : "border-gray-200"
       } ${
         darkMode ? "bg-[#202123]" : "bg-white"
       } flex-none ${width} p-4 flex flex-col ${darkMode ? "!text-white" : ""}`}
     >
-      <div className="flex flex-col flex-1">
-        <div className="flex items-center">
-          <div className={` rounded-sm`}>
-            <Image
-              src="/resumeAnalyzerminiLogo.png"
-              alt="Avatar"
-              width={100}
-              height={100}
-            />
-          </div>
-          <div className="ml-4">
-            <p className="font-bold text-lg">Resume Analyzer</p>
-          </div>
+      <div className="flex items-center">
+        <div className={` rounded-sm`}>
+          <Image
+            src="/resumeAnalyzerminiLogo.png"
+            alt="Avatar"
+            width={100}
+            height={100}
+          />
         </div>
-        <div
-          className={`flex-grow my-4 border-t ${
-            darkMode ? "border-[#444654]" : "border-gray-200 "
-          }`}
-        >
-          <p
-            className={`overflow-y ${
-              !darkMode ? "text-gray-600" : "text-white"
-            } text-sm p-4`}
-          >
-            Resume Analyzer is a cutting-edge tool that leverages the power of
-            AI to assist recruiters in analyzing resumes 🤖💼. The tool uses
-            ChatGPT 3.5, a state-of-the-art language model developed by OpenAI,
-            to provide insightful summaries of candidate resumes 📝🔍.
-            <br />
-            <br />
-            Recruiters can simply upload a candidate's resume to the tool, and
-            within seconds, they will receive a comprehensive analysis of the
-            resume, including key information such as work experience,
-            education, skills, and more 👨‍💼🎓👩‍💼. The tool also highlights any
-            notable achievements or accomplishments mentioned in the resume
-            🏆🌟.
-            <br />
-            <br />
-            What sets Resume Analyzer apart is its ability to create a summary
-            of the resume that captures the most important information in a
-            concise, easy-to-read format 📊✍️. Recruiters can choose to include
-            this summary in the candidate's PDF file for easy reference or
-            download 📄💻.
-            <br />
-            <br />
-            Overall, Resume Analyzer is a game-changer for recruiters looking to
-            streamline their hiring process and make informed decisions about
-            candidates 🚀👨‍💻👩‍💻.
-          </p>
+        <div className="ml-4">
+          <p className="font-bold text-lg">Resume Analyzer</p>
         </div>
       </div>
-      <div className="flex">
-        1
-        {/* <div
-          className={`${
-            darkMode ? "bg-[#202123]" : "bg-white"
-          } border-t border-gray-200`}
-        >
-          <div className="flex justify-center">
-            <p className="text-[12px]">
-              Copyright © {new Date().getFullYear()} ResumeAnalyzer All Rights
-              Reserved.
-            </p>
-          </div>
-        </div> */}
-      </div>
-      {/* <div
-        className={`fixed bottom-0 inset-x-0 ${
-          darkMode ? "bg-[#202123]" : "bg-white"
-        } border-t border-gray-200 z-10`}
+      <div
+        className={`flex-1 my-4 border-t overflow-y-scroll  ${
+          darkMode ? "border-[#444654]" : "border-gray-200 "
+        }`}
       >
-        <div className="flex justify-center py-2">
-          <p className="text-[12px]">
-            Copyright © {new Date().getFullYear()} ResumeAnalyzer All Rights
-            Reserved.
-          </p>
-        </div>
-      </div> */}
+        <p
+          className={` ${
+            !darkMode ? "text-gray-600" : "text-white"
+          } text-sm p-4 my-5`}
+        >
+          Resume Analyzer is a cutting-edge tool that leverages the power of AI
+          to assist recruiters in analyzing resumes 🤖💼. The tool uses ChatGPT
+          3.5, a state-of-the-art language model developed by OpenAI, to provide
+          insightful summaries of candidate resumes 📝🔍.
+          <br />
+          <br />
+          Recruiters can simply upload a candidate's resume to the tool, and
+          within seconds, they will receive a comprehensive analysis of the
+          resume, including key information such as work experience, education,
+          skills, and more 👨‍💼🎓👩‍💼. The tool also highlights any notable
+          achievements or accomplishments mentioned in the resume 🏆🌟.
+          <br />
+          <br />
+          What sets Resume Analyzer apart is its ability to create a summary of
+          the resume that captures the most important information in a concise,
+          easy-to-read format 📊✍️. Recruiters can choose to include this
+          summary in the candidate's PDF file for easy reference or download
+          📄💻.
+          <br />
+          <br />
+          Overall, Resume Analyzer is a game-changer for recruiters looking to
+          streamline their hiring process and make informed decisions about
+          candidates 🚀👨‍💻👩‍💻.
+        </p>
+      </div>
+
+      <div
+        className={`flex sm:relative fixed bottom-0 pt-5 text-[12px] ${
+          darkMode ? "bg-[#202123]" : "bg-white"
+        } border-t ${darkMode ? "border-[#444654]" : "border-gray-200"}`}
+      >
+        Copyright © {new Date().getFullYear()} ResumeAnalyzer All Rights
+        Reserved.
+      </div>
     </aside>
   );
 }
 
-function Aside({ darkMode }: any) {
+function Aside({ darkMode, messages }: any) {
   return <DrawerContent darkMode={darkMode} />;
 }
 
-function Messages({ darkMode }: any) {
+function SlowText({ text, delay = 20 }) {
+  const textRef = useRef(null);
+
+  useEffect(() => {
+    const textArray = text.split("");
+    let current = 0;
+    let timer;
+
+    function showNextLetter() {
+      textRef.current.textContent += textArray[current];
+      current++;
+      if (current === textArray.length) {
+        clearInterval(timer);
+      }
+    }
+
+    timer = setInterval(showNextLetter, delay);
+
+    return () => clearInterval(timer);
+  }, [text, delay]);
+
+  return <div ref={textRef} />;
+}
+
+function Messages({ darkMode, messages }: any) {
   return (
     <div className="flex-grow flex flex-col  ">
       {/* <ServiceModal isOpen={true} /> */}
       <div className="flex-grow overflow-auto absolute left-0 right-0">
         <div className="flex flex-col">
-          <div
-            className={`flex-none mt-4 p-8 ${
-              darkMode ? "bg-[#202123]" : "bg-white"
-            } ${darkMode ? "!text-white" : ""}`}
-          >
-            <div className="flex">
-              <div
-                className={`flex-shrink-0 ${
-                  darkMode ? "bg-white" : "bg-[#E5E7EB]"
-                } rounded-full h-[50px] w-[50px]`}
-              >
-                <Image
-                  src="/resumeAnalyzerminiLogo.png"
+          {messages?.map((message: any) => {
+            if (message.isUser) {
+              return (
+                <div
+                  className={`flex-none mt-4 p-8 ${
+                    darkMode ? "bg-[#444654]" : "bg-[#F3F4F6]"
+                  } ${darkMode ? "!text-white" : ""}`}
+                >
+                  <div className="flex items-center">
+                    <div
+                      className={`flex-shrink-0 ${
+                        darkMode ? "bg-white" : "bg-[#E5E7EB]"
+                      } rounded-sm w-[50px] h-[50px]`}
+                    >
+                      <UserAvatar />
+                    </div>
+                    {/* <img
+                  src="https://via.placeholder.com/50"
                   alt="Avatar"
-                  width={50}
-                  height={50}
-                />
-              </div>
-              <div className="ml-4">
-                <p className="text-black-700 text-[1.020rem]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam in scelerisque nisi, sit amet commodo quam. Nullam
-                  vitae mollis lorem. Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Nullam in scelerisque nisi, sit amet commodo
-                  quam. Nullam vitae mollis lorem. Lorem ipsum dolor sit amet,
-                  consectetur adipiscing elit. Nullam in scelerisque nisi, sit
-                  amet commodo quam. Nullam vitae mollis lorem. Lorem ipsum
-                  dolor sit amet, consectetur adipiscing elit. Nullam in
-                  scelerisque nisi, sit amet commodo quam. Nullam vitae mollis
-                  lorem.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className={`flex-none mt-4 p-8 ${
-              darkMode ? "bg-[#444654]" : "bg-[#F3F4F6]"
-            } ${darkMode ? "!text-white" : ""}`}
-          >
-            <div className="flex items-center">
+                  className="w-10 h-10 rounded-full"
+                /> */}
+                    <div className="ml-4">
+                      <p className="text-black-700 text-[1.020rem]">
+                        {message.text}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+            return (
               <div
-                className={`flex-shrink-0 ${
-                  darkMode ? "bg-white" : "bg-[#E5E7EB]"
-                } rounded-sm w-[50px] h-[50px]`}
+                className={`flex-none mt-4 p-8 ${
+                  darkMode ? "bg-[#202123]" : "bg-white"
+                } ${darkMode ? "!text-white" : ""}`}
               >
-                <UserAvatar />
+                <div className="flex">
+                  <div
+                    className={`flex-shrink-0 ${
+                      darkMode ? "bg-white" : "bg-[#E5E7EB]"
+                    } rounded-full h-[50px] w-[50px]`}
+                  >
+                    <Image
+                      src="/resumeAnalyzerminiLogo.png"
+                      alt="Avatar"
+                      width={50}
+                      height={50}
+                    />
+                  </div>
+                  <div
+                    className={`ml-4 ${
+                      message.isLoading && "flex justify-center items-center"
+                    }`}
+                  >
+                    <p className="text-black-700 text-[1.020rem]">
+                      {message.isLoading ? (
+                        <div
+                          className={`w-[8px] h-6 cursor-blink  ${
+                            darkMode ? "bg-white" : "bg-[#1F2937]"
+                          } `}
+                        ></div>
+                      ) : (
+                        <SlowText text={message.text} />
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
-              {/* <img
-                src="https://via.placeholder.com/50"
-                alt="Avatar"
-                className="w-10 h-10 rounded-full"
-              /> */}
-              <div className="ml-4">
-                <p className="text-black-700 text-[1.020rem]">
-                  Phasellus ultrices augue sapien, auctor viverra augue mattis
-                  eget. Sed quis aliquam odio.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div
-            className={`flex-none mt-4 p-8 ${
-              darkMode ? "bg-[#202123]" : "bg-white"
-            } ${darkMode ? "!text-white" : ""}`}
-          >
-            <div className="flex">
-              <div
-                className={`flex-shrink-0 ${
-                  darkMode ? "bg-white" : "bg-[#E5E7EB]"
-                } rounded-full h-[50px] w-[50px]`}
-              >
-                <Image
-                  src="/resumeAnalyzerminiLogo.png"
-                  alt="Avatar"
-                  width={50}
-                  height={50}
-                />
-              </div>
-              <div className="ml-4">
-                <p className="text-black-700 text-[1.020rem]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Nullam in scelerisque nisi, sit amet commodo quam. Nullam
-                  vitae mollis lorem. Lorem ipsum dolor sit amet, consectetur
-                  adipiscing elit. Nullam in scelerisque nisi, sit amet commodo
-                  quam. Nullam vitae mollis lorem. Lorem ipsum dolor sit amet,
-                  consectetur adipiscing elit. Nullam in scelerisque nisi, sit
-                  amet commodo quam. Nullam vitae mollis lorem. Lorem ipsum
-                  dolor sit amet, consectetur adipiscing elit. Nullam in
-                  scelerisque nisi, sit amet commodo quam. Nullam vitae mollis
-                  lorem.
-                </p>
-              </div>
-            </div>
-          </div>
+            );
+          })}
           {/* Add more messages here */}
         </div>
       </div>
@@ -649,17 +419,18 @@ const UserAvatar = () => {
 };
 
 const MobileDrawer = ({ drawerOpen, setDrawerOpen, darkMode }: any) => {
-  console.log({ setDrawerOpen });
   return (
-    <div className={`absolute flex h-screen ${!drawerOpen && "hidden"} w-full`}>
+    <div
+      className={`absolute flex h-screen ${!drawerOpen && "hidden"} w-full `}
+    >
       <div
         className={`${
           drawerOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-all duration-300 ease-in-out fixed z-20 h-full w-full bg-white  shadow-lg`}
+        } transition-all duration-300 ease-in-out fixed z-20 w-full h-screen bg-white  shadow-lg`}
       >
-        <div className="flex flex-col">
+        <div className="h-screen flex flex-col">
           <div
-            className={`flex-1
+            className={`flex 
              ${
                darkMode ? "bg-[#202123]" : "bg-white"
              } flex justify-end px-6 py-4`}
@@ -671,7 +442,7 @@ const MobileDrawer = ({ drawerOpen, setDrawerOpen, darkMode }: any) => {
               />
             </button>
           </div>
-          <div className="flex flex-col items-center  h-full">
+          <div className="flex-1 flex-col items-center h-full">
             <DrawerContent width={"full-width"} darkMode={darkMode} />
           </div>
         </div>
@@ -720,7 +491,8 @@ function ChatPage() {
     setEditable(apiIsLoading !== true);
   }, [apiIsLoading]);
 
-  const handleUserInput = (text: any) => {
+  const onInputChange = (e: any) => {
+    const text = e.target.value;
     setMessage(text);
   };
 
@@ -771,18 +543,34 @@ function ChatPage() {
     return dataPayload;
   };
 
-  const handlePress = () => {
-    const newMessage = {
+  useEffect(() => {
+    console.log({ messages });
+  }, [messages]);
+
+  const SendMessageToBot = () => {
+    const userMessage = {
       text: message,
       isUser: true,
       id: Date.now(),
       isLoading: false,
     };
-    setMessages((messages) => [...messages, { ...newMessage }]);
+    setMessages((messages) => [...messages, { ...userMessage }]);
     setMessage("");
-    const messagesPayload = transformer([...messages, { ...newMessage }]);
 
-    // ask(messagesPayload);
+    const messagesPayload = transformer([...messages, { ...userMessage }]);
+
+    ask(messagesPayload);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      alert("holla");
+      SendMessageToBot();
+    }
+  };
+
+  const onSendClick = () => {
+    SendMessageToBot();
   };
 
   console.log({ darkMode });
@@ -793,8 +581,8 @@ function ChatPage() {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
-  React.useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
+  React.useLayoutEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 900px)");
 
     setIsMobile(mediaQuery.matches);
 
@@ -892,9 +680,16 @@ function ChatPage() {
               </div>
             </div>
             {/* Chat messages */}
-            <Messages darkMode={darkMode} />
+            <Messages darkMode={darkMode} messages={messages} />
             {/* input  */}
-            <MyInput isDark={darkMode} handleUpload={handleUpload} />
+            <MyInput
+              isDark={darkMode}
+              handleUpload={handleUpload}
+              onSendClick={onSendClick}
+              value={message}
+              onChange={onInputChange}
+              onKeyDown={handleKeyPress}
+            />
           </div>
         </div>
       </div>

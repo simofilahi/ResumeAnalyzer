@@ -11,6 +11,7 @@ import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
 import { useRef } from "react";
 
 import mammoth from "mammoth";
+import { useDarkMode } from "@src/hooks/useTheme";
 
 if (typeof window !== "undefined") {
   console.log("pdfjs.version", pdfjs?.version);
@@ -189,6 +190,7 @@ function MyInput({
 
 const DarkModeToggle = ({ isDarkMode, setToggleDarkMode }: any) => {
   const handleToggle = () => {
+    console.log("here");
     setToggleDarkMode(!isDarkMode);
   };
 
@@ -509,7 +511,9 @@ const BuyMeCoffeeButton = () => {
 };
 
 function ChatPage() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useDarkMode();
+
+  console.log({ darkMode });
 
   const [messages, setMessages] = useState([
     {

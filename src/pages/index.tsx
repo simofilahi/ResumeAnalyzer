@@ -1,16 +1,33 @@
+import DarkModeToggle from "@src/components/darkModeToggle";
+import { useDarkMode } from "@src/hooks/useTheme";
 import Link from "next/link";
 import React from "react";
+import { FiMoon, FiSun } from "react-icons/fi";
 
 const LandingPage = () => {
+  const [isDark] = useDarkMode();
+
   return (
     <div>
+      <DarkModeToggle />
       <div
-        className="site-content bg-white overflow-hidden"
+        className={`site-content  ${
+          isDark ? "bg-[#202123]" : "bg-white"
+        } overflow-hidden`}
         data-testid="site-content"
       >
+        {/* <section
+          className={` ${
+            isDark ? "bg-[#202123]" : "bg-white"
+          } }  pt-8 overflow-hidden sm:pt-12 lg:relative `}
+        >
+          
+        </section> */}
         <section
           id="s1e7qf8mst"
-          className="pt-8 overflow-hidden sm:pt-12 lg:relative lg:py-24 xl:py-36 2xl:py-48"
+          className={` ${
+            isDark ? "bg-[#202123]" : "bg-white"
+          } }  pt-8 overflow-hidden sm:pt-12 lg:relative lg:py-24 xl:py-36 2xl:py-48`}
           // sectionName="hero"
           //   imagestretch="true"
           //   sectioncomponent="Hero"
@@ -27,18 +44,36 @@ const LandingPage = () => {
                   src="https://storage.googleapis.com/mixo-files/logos/resumeAnalyzer-1682767628468.svg"
                   alt="Resume Analyzer logo"
                 />
-                <p className="font-sans font-bold text-gray-900 text-2xl">
+                <p
+                  className={`${
+                    isDark ? "text-white" : "text-gray-900"
+                  } font-sans font-bold text-gray-900 text-2xl`}
+                >
                   {/* Resume Analyzer */}
                 </p>
               </a>
               <div className="mt-14">
                 <div className="mt-6 sm:max-w-xl">
-                  <h1 className="text-4xl font-black tracking-tight text-gray-900 sm:text-6xl md:text-7xl">
+                  <h1
+                    className={`text-4xl font-black tracking-tight ${
+                      isDark ? "text-white" : "text-gray-900"
+                    } sm:text-6xl md:text-7xl`}
+                  >
                     {/* Smart Hiring Starts Here. */}
                     Lorerm
-                    <span className="text-primary">.</span>
+                    <span
+                      className={`${
+                        isDark ? "text-white" : "text-gray-900"
+                      } text-primary`}
+                    >
+                      .
+                    </span>
                   </h1>
-                  <h2 className="mt-6 text-lg text-gray-500 sm:text-xl">
+                  <h2
+                    className={`mt-6 text-lg ${
+                      isDark ? "text-white" : "text-gray-500"
+                    }  sm:text-xl`}
+                  >
                     lorem
                     {/* Maximize your hiring efficiency with AI-powered resume
                     analysis and our interactive chat page. */}
@@ -65,7 +100,7 @@ const LandingPage = () => {
                     <div>
                       <Link
                         href="/chat"
-                        className="rounded-full bg-black py-[14px] px-32 text-white font-semibold"
+                        className={`rounded-full  bg-black py-[14px] px-32 text-white font-semibold`}
                         type="submit"
                       >
                         Try now
@@ -73,30 +108,6 @@ const LandingPage = () => {
                     </div>
                     {/* </form> */}
                   </div>
-                  {/* <script></script>
-                <script type="module" async="">
-                  import {
-                    h as e,
-                    c as m,
-                  } from "/site/resume-analyzer-fbe4y/assets/iles.54b00b61.js";
-                  import { c as o } from "/site/resume-analyzer-fbe4y/assets/SignupForm.a7f764b8.js";
-                  import "/site/resume-analyzer-fbe4y/assets/vendor-vue.398eccbf.js";
-                  import "/site/resume-analyzer-fbe4y/assets/UiButton.cab407b3.js";
-                  import "/site/resume-analyzer-fbe4y/assets/vite.c27b6911.js";
-                  e(
-                    m,
-                    o,
-                    "ile-1",
-                    {
-                      name: "hero",
-                      placeholder: "Enter your email...",
-                      buttonLabel: "Submit",
-                      siteId: "6hdJYjD7ces5HzWSl0KM",
-                      className: "mt-4 sm:max-w-lg",
-                    },
-                    {}
-                  );
-                </script> */}
                 </div>
                 {/* <!-- Social Proofing --><!-- User Review --> */}
                 <div className="mt-6">
@@ -111,9 +122,9 @@ const LandingPage = () => {
                         {/* “Resume Analyzer has helped us save so much time in our
                         recruitment process, and the summaries are spot-on.” */}
                       </p>
-                      <p className="sm:pl-2.5 text-sm sm:text-base font-bold text-gray-500">
+                      {/* <p className="sm:pl-2.5 text-sm sm:text-base font-bold text-gray-500">
                         Teresa Lia
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                 </div>
@@ -168,7 +179,9 @@ const LandingPage = () => {
           </div>
         </section>
         <section
-          className="relative pt-16 pb-32 overflow-hidden bg-white space-y-24"
+          className={`${
+            isDark ? "bg-[#202123]" : "bg-white"
+          } relative pt-16 pb-32 overflow-hidden  space-y-24`}
           //   sectionName="features"
           id="8p9e3nl6nt"
           sectioncomponent="Features"
@@ -184,12 +197,26 @@ const LandingPage = () => {
               <div className="lg:col-start-2 lg:mx-0 lg:px-0 lg:pr-8 max-w-xl px-4 mx-auto space-y-6 sm:px-6 lg:py-28 xl:py-32 2xl:mx-0">
                 {/* <!-- Feature --> */}
                 <div>
-                  <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
+                  <h2
+                    className={`text-4xl font-extrabold tracking-tight ${
+                      isDark ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     lorem
                     {/* Accurate resume summaries */}
-                    <span className="text-primary">.</span>
+                    <span
+                      className={`text-primary ${
+                        isDark ? "text-white" : "text-gray-900"
+                      }`}
+                    >
+                      .
+                    </span>
                   </h2>
-                  <p className="mt-4 text-lg leading-relaxed text-gray-500 sm:text-xl">
+                  <p
+                    className={`mt-4 text-lg leading-relaxed ${
+                      isDark ? "text-white" : "text-gray-500"
+                    } sm:text-xl`}
+                  >
                     lorem
                     {/* Resume Analyzer uses cutting-edge AI technology to provide
                     accurate and insightful summaries of candidate resumes, so
@@ -202,13 +229,14 @@ const LandingPage = () => {
               </div>
               {/* <!-- Image --> */}
               <div className="lg:col-start-1 mt-12 sm:mt-16 lg:mt-0">
-                <div className="pr-4 -sm:ml-48 sm:pr-6 md:-ml-16 lg:px-0 lg:m-0 lg:relative lg:h-full lg:flex lg:items-center">
-                  lorem
-                  {/* <img
+                <div
+                  className={`pr-4 -sm:ml-48 sm:pr-6 md:-ml-16 lg:px-0 lg:m-0 lg:relative lg:h-full lg:flex lg:items-center`}
+                >
+                  <img
                     src="https://images.unsplash.com/photo-1423592707957-3b212afa6733?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwzMzczODV8MHwxfHNlYXJjaHw3fHxyZXN1bWV8ZW58MHwwfHx8MTY4Mjc2MDg3MA&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=1080"
                     className="lg:right-0 rounded-r-2xl w-full 2xl:max-h-[44rem]"
                     alt="Accurate resume summaries"
-                  /> */}
+                  />
                 </div>
               </div>
             </div>
@@ -218,10 +246,25 @@ const LandingPage = () => {
               <div className="lg:mx-auto lg:max-w-3xl xl:pl-12 2xl:pl-20 2xl:justify-self-end max-w-xl px-4 mx-auto space-y-6 sm:px-6 lg:py-28 xl:py-32 2xl:mx-0">
                 {/* <!-- Feature --> */}
                 <div>
-                  <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
-                    Time-saving<span className="text-primary">.</span>
+                  <h2
+                    className={`text-4xl font-extrabold tracking-tight ${
+                      isDark ? "text-white" : "text-gray-900"
+                    }`}
+                  >
+                    Time-saving
+                    <span
+                      className={`${
+                        isDark ? "text-white" : "text-gray-900"
+                      } text-primary`}
+                    >
+                      .
+                    </span>
                   </h2>
-                  <p className="mt-4 text-lg leading-relaxed text-gray-500 sm:text-xl">
+                  <p
+                    className={`mt-4 text-lg leading-relaxed ${
+                      isDark ? "text-white" : "text-gray-500"
+                    } sm:text-xl`}
+                  >
                     lorem
                     {/* Our tool saves you valuable time by automating the
                     time-consuming task of resume screening, allowing you to
@@ -250,10 +293,18 @@ const LandingPage = () => {
               <div className="lg:col-start-2 lg:mx-0 lg:px-0 lg:pr-8 max-w-xl px-4 mx-auto space-y-6 sm:px-6 lg:py-28 xl:py-32 2xl:mx-0">
                 {/* <!-- Feature --> */}
                 <div>
-                  <h2 className="text-4xl font-extrabold tracking-tight text-gray-900">
+                  <h2
+                    className={`text-4xl font-extrabold tracking-tight ${
+                      isDark ? "text-white" : "text-gray-900"
+                    }`}
+                  >
                     Error-free<span className="text-primary">.</span>
                   </h2>
-                  <p className="mt-4 text-lg leading-relaxed text-gray-500 sm:text-xl">
+                  <p
+                    className={`mt-4 text-lg leading-relaxed ${
+                      isDark ? "text-white" : "text-gray-500"
+                    } sm:text-xl`}
+                  >
                     lorem
                     {/* Say goodbye to human errors that occur during manual
                     screening - our AI-powered tool provides error-free

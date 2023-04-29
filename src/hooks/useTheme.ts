@@ -1,4 +1,4 @@
-import {ThemeContext} from 'src/provider/theme';
-import React, {useContext} from 'react';
+import React, { useContext } from "react";
+import { DarkModeContext } from "../provider/darkMode";
 
-export const useTheme = () => useContext(ThemeContext);
+export const useDarkMode = () => useContext(DarkModeContext);

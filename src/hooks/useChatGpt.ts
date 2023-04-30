@@ -17,21 +17,28 @@ const useChatGPT = () => {
         setIsError(false);
         setError(null);
         setData(null);
+        const newMessages = messages.map((message) => ({
+          ...message,
+          content:
+            "You are virtual resume analyzer assistance for recruiters, never answer other topics,  " +
+            message.content,
+        }));
 
         const response = await fetch(chatGPTUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Authorization: `Bearer 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`,
+            Authorization: `Bearer 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`,
           },
           body: JSON.stringify({
             model: "gpt-3.5-turbo",
             messages: [
               {
                 role: "system",
-                content: "You are virtual resume analyzer for recruiters",
+                content:
+                  "You are virtual resume analyzer assistance for recruiters, only answer about recruitment topics",
               },
-              ...messages,
+              ...newMessages,
             ],
             max_tokens: 2000,
             n: 1,

@@ -1,39 +1,35 @@
-import { FaSun, FaMoon } from "react-icons/fa";
-import { useState } from "react";
+import { useDarkMode } from "@src/hooks/useTheme";
+import { FaMoon, FaSun } from "react-icons/fa";
 
-function DarkModeToggle() {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const handleSwitchClick = () => {
-    setIsDarkMode(!isDarkMode);
+const DarkModeToggle = () => {
+  const [isDarkMode, setToggleDarkMode] = useDarkMode();
+  const handleToggle = () => {
+    console.log("here");
+    setToggleDarkMode(!isDarkMode);
   };
 
   return (
-    <div
-      className="fixed z-50 top-0 left-0 flex items-center justify-center w-full h-full bg-gray-800 bg-opacity-80"
-      //   style={{ visibility: isDarkMode ? "visible" : "hidden" }}
-    >
+    <div className="flex items-center">
+      <div className="mr-2">
+        <FaSun className="text-yellow-400" />
+      </div>
       <div
-        className="relative flex items-center justify-center w-10 h-10 bg-white rounded-full cursor-pointer"
-        onClick={handleSwitchClick}
+        className={`w-12 h-6 rounded-full ${
+          isDarkMode ? "bg-gray-800" : "bg-gray-200"
+        } p-1 flex items-center cursor-pointer`}
+        onClick={handleToggle}
       >
-        <FaMoon
-          className="absolute text-gray-800 transition-all duration-300 ease-in-out"
-          style={{
-            opacity: isDarkMode ? 0 : 1,
-            transform: isDarkMode ? "translateX(0)" : "translateX(-20px)",
-          }}
-        />
-        <FaSun
-          className="absolute text-yellow-500 transition-all duration-300 ease-in-out"
-          style={{
-            opacity: isDarkMode ? 1 : 0,
-            transform: isDarkMode ? "translateX(20px)" : "translateX(0)",
-          }}
-        />
+        <div
+          className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-all duration-300 ${
+            isDarkMode ? "translate-x-6" : ""
+          }`}
+        ></div>
+      </div>
+      <div className="ml-2">
+        <FaMoon className="text-gray-500" />
       </div>
     </div>
   );
-}
+};
 
 export default DarkModeToggle;

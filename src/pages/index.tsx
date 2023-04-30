@@ -5,6 +5,7 @@ import React from "react";
 import Image from "next/image";
 import { FiMoon, FiSun } from "react-icons/fi";
 import Logo from "@src/components/logo";
+import BuyMeCoffeeButton from "@src/components/buyMeCoffe";
 
 const Header = () => {
   return <div className="fixed top-0 h-10 w-full bg-red-500"></div>;
@@ -15,7 +16,6 @@ const LandingPage = () => {
 
   return (
     <div className={`w-full  ${isDark ? "bg-[#202123]" : "bg-white"}`}>
-      <Header />
       <div
         className={`site-content  ${
           isDark ? "bg-[#202123]" : "bg-white"
@@ -29,9 +29,17 @@ const LandingPage = () => {
         >
           
         </section> */}
-        {/* <div className="flex pl-[5%] py-2 px-2">
-          <DarkModeToggle />
-        </div> */}
+        <div
+          className={`flex items-center px-4 justify-between py-8 border-b ${
+            isDark ? "border-[#444654]" : "border-gray-100"
+          } `}
+        >
+          <Logo size={40} showTitle />
+          <div className="flex flex-row">
+            {/* <BuyMeCoffeeButton /> */}
+            <DarkModeToggle />
+          </div>
+        </div>
         <div className="px-2 flex flex-1 flex-col">
           <section
             id="s1e7qf8mst"
@@ -45,21 +53,8 @@ const LandingPage = () => {
           >
             <div className="max-w-md px-4 mx-auto sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl lg:grid lg:grid-cols-2 lg:gap-24">
               <div className="relative z-[1]">
-                <a
-                  href="https://www.mixo.io/site/resume-analyzer-fbe4y"
-                  className="flex items-center space-x-2"
-                >
-                  <Logo />
-                  <p
-                    className={`${
-                      isDark ? "text-white" : "text-gray-900"
-                    } font-sans font-bold text-gray-900 text-2xl`}
-                  >
-                    Skill Scan
-                  </p>
-                </a>
-                <div className="mt-14">
-                  <div className="mt-6 sm:max-w-xl">
+                <div className=" ">
+                  <div className=" sm:max-w-xl">
                     <h1
                       className={`text-4xl font-black tracking-tight ${
                         isDark ? "text-white" : "text-gray-900"
@@ -650,10 +645,6 @@ const LandingPage = () => {
             </div>
           </section>
         </div>
-        <div
-          className="wrap w-max max-w-xs animate-in fade-in delay-[1000] duration-700"
-          data-v-29401157=""
-        ></div>
       </div>
       <footer
         className={`${

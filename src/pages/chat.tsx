@@ -14,6 +14,7 @@ import mammoth from "mammoth";
 import { useDarkMode } from "@src/hooks/useTheme";
 import DarkModeToggle from "@src/components/darkModeToggle";
 import Logo from "@src/components/logo";
+import BuyMeCoffeeButton from "@src/components/buyMeCoffe";
 
 if (typeof window !== "undefined") {
   console.log("pdfjs.version", pdfjs?.version);
@@ -335,40 +336,11 @@ const BuyMeACoffee = () => {
 const UserAvatar = () => {
   return (
     <Image
-      src={"/unisex_avatar.png"}
+      src={"/unisex_avatar_latest.png"}
       alt="user-avatar"
       width={50}
       height={50}
     />
-  );
-};
-
-const SupportMessage = () => {
-  return (
-    <div className="mx-2 text-white px-[1px]  flex items-center justify-center">
-      <p className="mr-2">Help us by supporting our hosting and AI API costs</p>
-      <FaHeart className="text-red-500" />
-    </div>
-  );
-};
-
-const BuyMeCoffeeButton = () => {
-  return (
-    <a
-      href="https://www.buymeacoffee.com/example"
-      target="_blank"
-      rel="noopener noreferrer"
-      className=" bg-red-500 text-white px-4 mx-4 py-2 flex items-center justify-center rounded-tl-lg hover:bg-red-600 transition-all duration-300"
-    >
-      <SupportMessage />
-      <img
-        src="https://cdn.buymeacoffee.com/buttons/v2/default-red.png"
-        alt="Buy Me A Coffee"
-        height="24"
-        width="108"
-        className="rounded-full "
-      />
-    </a>
   );
 };
 
@@ -381,15 +353,19 @@ const Header = () => {
       } justify-between flex flex-row`}
     >
       <div
-        className={`py-8 px-2 max-w-[1400px] ml-auto mr-auto w-full ${
+        className={`flex  px-4 justify-between items-center py-8 max-w-[1400px] ml-auto mr-auto w-full ${
           darkMode ? "bg-[#444654]" : "bg-white"
+        } ${
+          darkMode ? "border-[#444654]" : "border-gray-100"
         } justify-between flex flex-row`}
+
+        // className={`flex  px-4 justify-between py-8 border-b  `}
       >
         <div className={` flex-1 justify-start `}>
-          <Logo />
+          <Logo size={40} />
         </div>
-        <div className="flex self-end">
-          {/* <BuyMeCoffeeButton /> */}
+        <div className="flex items-center justify-center">
+          <BuyMeCoffeeButton />
           <DarkModeToggle />
         </div>
       </div>

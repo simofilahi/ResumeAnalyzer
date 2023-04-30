@@ -1,7 +1,7 @@
 import { useDarkMode } from "@src/hooks/useTheme";
 import Image from "next/image";
 
-const Logo = () => {
+const Logo = ({ size = 40, showTitle = true }) => {
   const [isDark] = useDarkMode();
   return (
     <a
@@ -9,19 +9,23 @@ const Logo = () => {
       className="flex items-center space-x-2"
     >
       <Image
-        className="w-auto h-8"
+        className="w-auto"
         src="/skillScan.png"
         alt="skill Scan logo"
-        width={40}
-        height={40}
+        width={size}
+        height={size}
       />
-      <p
-        className={`${
-          isDark ? "text-white" : "text-gray-900"
-        } font-sans font-bold text-gray-900 text-2xl`}
-      >
-        Skill Scan
-      </p>
+      {showTitle && (
+        <>
+          <p
+            className={`hidden md:block ${
+              isDark ? "text-white" : "text-gray-900"
+            } font-sans font-bold text-gray-900 text-2xl`}
+          >
+            Talent Scan
+          </p>
+        </>
+      )}
     </a>
   );
 };

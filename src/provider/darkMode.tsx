@@ -9,21 +9,22 @@ const DarkModeProvider = ({ children }: any) => {
 
   const setIsDark = (isDark: boolean) => {
     console.log({ isDark });
-    setDark((isDark) => !isDark);
-    storeData("isDark", !isDark.toString());
+    setDark((isDark) => {
+      storeData("isDark", !isDark);
+      return !isDark;
+    });
   };
 
   useEffect(() => {
     (function () {
       const value = getData("isDark");
+      console.log({ value });
 
       if (value === "true") {
         setDark(true);
-      }
+      } else if (value === undefined) storeData("isDark", false);
     })();
   }, []);
-
-  console.log("rerender");
 
   return (
     <DarkModeContext.Provider value={[isDark, setIsDark]}>

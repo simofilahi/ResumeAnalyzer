@@ -15,9 +15,9 @@ import { useDarkMode } from "@src/hooks/useTheme";
 import DarkModeToggle from "@src/components/darkModeToggle";
 import Logo from "@src/components/logo";
 import BuyMeCoffeeButton from "@src/components/buyMeCoffe";
+import Toast from "@src/components/FileModal";
 
 if (typeof window !== "undefined") {
-  console.log("pdfjs.version", pdfjs?.version);
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 }
 
@@ -97,10 +97,11 @@ function MyInput({
       arrayBuffer: await file.arrayBuffer(),
     });
     const text = result.value.replace(/<\/?[^>]+(>|$)/g, ""); // remove HTML tags
-    console.log(text); // Output the extracted text content
-    console.log({ doc: JSON.stringify(text) });
+
     handleUpload(text);
   };
+  const [file, setFile] = useState("");
+  const [toastMsg, setToastMsg] = useState("");
 
   const extractTextFromPdf = () => {
     const fileReader = new FileReader();
@@ -109,7 +110,6 @@ function MyInput({
       const arrayBuffer = fileReader.result;
       const pdfData = new Uint8Array(arrayBuffer);
       const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise;
-      console.log({ pages: pdfDocument.numPages });
 
       let text = "";
       for (let i = 1; i <= pdfDocument.numPages; i++) {
@@ -118,7 +118,7 @@ function MyInput({
         const pageText = pageTextContent.items.map((item) => item.str).join("");
         text += pageText;
       }
-      console.log({ text: JSON.stringify(text) });
+
       handleUpload(text);
       // setPages(newPages);
     };
@@ -126,14 +126,31 @@ function MyInput({
     fileReader.readAsArrayBuffer(file);
   };
 
+  function checkFileSize(file) {
+    if (file.size <= 5000000) {
+      // File size is below 5 MB
+      return true;
+    } else {
+      // File size is above 5 MB
+      return false;
+    }
+  }
+
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
+    setToastMsg("");
+    setFile(file);
 
     const allowedTypes = [
       "application/pdf",
       "application/msword",
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ];
+
+    if (!checkFileSize(file)) {
+      setToastMsg("File size exceeded. Please upload a file smaller than 5MB.");
+      return;
+    }
 
     if (!file) return;
 
@@ -147,46 +164,57 @@ function MyInput({
     ) {
       extractFromDoc(file);
     } else {
-      alert("Please select a PDF, DOC, or DOCX file.");
+      setToastMsg("Please select a PDF, DOC, or DOCX file.");
     }
   };
 
   return (
-    <div className="fixed bottom-20 max-w-[1300px] w-[100%] min-w-[300px] self-center px-5">
-      <div className="w-[100%] ml-0 mr-0">
-        <input
-          type="text"
-          className={`w-full ${
-            isDark ? "bg-[#444654]" : "bg-white"
-          }  py-4 pr-10 pl-4 rounded-lg shadow-md outline-none ${
-            isDark ? "text-white" : "text-gray-900"
-          }`}
-          placeholder="Type your message..."
-          value={value}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-        />
-        <button
-          className="absolute top-1/2 right-8 transform -translate-y-1/2 cursor-pointer"
-          onClick={onSendClick}
-        >
-          <AiOutlineSend size={24} color={`${isDark ? "#fff" : "#1F2937"}`} />
-        </button>
-        <button
-          className="absolute top-1/2 right-20 transform -translate-y-1/2 cursor-pointer"
-          // onClick={handleUploadClick}
-        >
+    <>
+      <Toast
+        msg={toastMsg}
+        show={Boolean(toastMsg?.length)}
+        setShow={() => setToastMsg("")}
+      />
+      <div className="fixed bottom-20 max-w-[1300px] w-[100%] min-w-[300px] self-center px-5">
+        <div className="w-[100%] ml-0 mr-0">
           <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            onChange={handleFileChange}
-            className="w-14 absolute -right-4 opacity-0 cursor-pointer"
+            type="text"
+            className={`w-full ${
+              isDark ? "bg-[#444654]" : "bg-white"
+            }  py-4 pr-10 pl-4 rounded-lg shadow-md outline-none ${
+              isDark ? "text-white" : "text-gray-900"
+            }`}
+            placeholder="Type your message..."
+            value={value}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
             disabled={isDisabled}
           />
-          <HiOutlineUpload size={24} color={`${isDark ? "#fff" : "#1F2937"}`} />
-        </button>
+          <button
+            className="absolute top-1/2 right-8 transform -translate-y-1/2 cursor-pointer"
+            onClick={onSendClick}
+          >
+            <AiOutlineSend size={24} color={`${isDark ? "#fff" : "#1F2937"}`} />
+          </button>
+          <button
+            className="absolute top-1/2 right-20 transform -translate-y-1/2 cursor-pointer"
+            // onClick={handleUploadClick}
+          >
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={handleFileChange}
+              className="w-14 absolute -right-4 opacity-0 cursor-pointer"
+              onClick={(event) => (event.target.value = null)}
+            />
+            <HiOutlineUpload
+              size={24}
+              color={`${isDark ? "#fff" : "#1F2937"}`}
+            />
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -373,8 +401,16 @@ const Header = () => {
   );
 };
 
-function Questions() {
+function Questions({ pickQuestion }: any) {
   const [darkMode] = useDarkMode();
+
+  const questions = [
+    "List of relevant skills and technologies",
+    "Candidate's top strengths and areas of expertise",
+    "Any potential red flags or concerns regarding the candidate",
+    "Comparison of the candidate's qualifications to the job requirements",
+    "Assessment of the candidate's soft skills, such as communication or leadership abilities",
+  ];
 
   return (
     <div className="flex flex-col">
@@ -388,24 +424,15 @@ function Questions() {
           Suggested Questions
         </p>
         <div className="flex flex-wrap font-medium">
-          <button className="bg-gray-200 rounded-full py-2 px-4 m-2">
-            How are you?
-          </button>
-          <button className="bg-gray-200 rounded-full py-2 px-4 m-2">
-            What are you doing?
-          </button>
-          <button className="bg-gray-200 rounded-full py-2 px-4 m-2">
-            What's up?
-          </button>
-          <button className="bg-gray-200 rounded-full py-2 px-4 m-2">
-            How's it going?
-          </button>
-          <button className="bg-gray-200 rounded-full py-2 px-4 m-2">
-            How's your day?
-          </button>
-          <button className="bg-gray-200 rounded-full py-2 px-4 m-2">
-            What do you like to do?
-          </button>
+          {questions.map((question, index) => (
+            <button
+              key={index}
+              className="bg-gray-200 rounded-full py-2 px-4 m-2"
+              onClick={() => pickQuestion(question)}
+            >
+              {question}
+            </button>
+          ))}
         </div>
       </div>
     </div>
@@ -432,10 +459,6 @@ function ChatPage() {
   const [responseCount, setResponseCount] = useState(0);
 
   const { data, isLoading: apiIsLoading, isError, error, ask } = useChatGPT();
-
-  useEffect(() => {
-    console.log({ data });
-  }, [data]);
 
   const handleUpload = async (text: string) => {
     await ask([{ role: "user", content: text }]);
@@ -509,13 +532,9 @@ function ChatPage() {
     return dataPayload;
   };
 
-  useEffect(() => {
-    console.log({ messages });
-  }, [messages]);
-
-  const SendMessageToBot = () => {
+  const SendMessageToBot = (text: string) => {
     const userMessage = {
-      text: message,
+      text: text ?? message,
       isUser: true,
       id: Date.now(),
       isLoading: false,
@@ -533,6 +552,12 @@ function ChatPage() {
     }
   };
 
+  const pickQuestion = (text: string) => {
+    console.log({ text });
+    setMessage(text);
+    SendMessageToBot(text);
+  };
+
   const onSendClick = () => {
     SendMessageToBot();
   };
@@ -548,12 +573,12 @@ function ChatPage() {
         <div className="flex-grow flex flex-col max-w-[1400px] relative ml-auto mr-auto">
           <div
             ref={messagesEndRef}
-            className={`h-[70%] max-h-[70%] ${
+            className={`h-[68%] max-h-[68%] ${
               darkMode ? "bg-[#202123]" : "bg-gray-100"
             }  relative flex flex-col p-4 overflow-y-scroll`}
           >
             {/* Suggestion */}
-            <Questions />
+            <Questions pickQuestion={pickQuestion} />
             {/* Chat messages */}
             <Messages
               darkMode={darkMode}

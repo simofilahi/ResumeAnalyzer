@@ -4,7 +4,6 @@ import { FaMoon, FaSun } from "react-icons/fa";
 const DarkModeToggle = () => {
   const [isDarkMode, setToggleDarkMode] = useDarkMode();
   const handleToggle = () => {
-    console.log("here");
     setToggleDarkMode(!isDarkMode);
   };
 

@@ -122,7 +122,7 @@ const LandingPage = () => {
                             isDark ? "text-white" : "text-gray-800"
                           }  sm:text-lg`}
                         >
-                          ”SkillScan has helped us save so much time in our
+                          ”Talent Scan has helped us save so much time in our
                           recruitment process, and the summaries are spot-on.”
                         </p>
                         <p className="sm:pl-2.5 text-sm sm:text-base font-bold text-gray-500">
@@ -219,7 +219,7 @@ const LandingPage = () => {
                         isDark ? "text-white" : "text-gray-500"
                       } sm:text-xl`}
                     >
-                      Skill Scan uses cutting-edge AI technology to provide
+                      Talent Scan uses cutting-edge AI technology to provide
                       accurate and insightful summaries of candidate resumes, so
                       you can find the best fit for your organization.
                     </p>
@@ -434,7 +434,9 @@ const LandingPage = () => {
           >
             <div aria-hidden="true" className="block" data-v-77b1cd82="">
               <div
-                className="absolute inset-y-0 left-0 w-1/2 bg-gray-50 rounded-r-3xl mb-12"
+                className={`absolute inset-y-0 left-0 w-1/2 ${
+                  isDark ? "bg-black" : "bg-gray-50"
+                }  rounded-r-3xl mb-12`}
                 data-v-77b1cd82=""
               ></div>
               <svg
@@ -479,7 +481,9 @@ const LandingPage = () => {
               data-v-77b1cd82=""
             >
               <div
-                className="relative px-6 py-10 overflow-hidden bg-white border-primary border-2 shadow-xl rounded-2xl sm:px-12 sm:py-20"
+                className={`relative px-6 py-10 overflow-hidden  ${
+                  isDark ? "bg-[#202123]" : "bg-white"
+                } border-primary border-2 shadow-xl rounded-2xl sm:px-12 sm:py-20`}
                 data-v-77b1cd82=""
               >
                 <div
@@ -598,10 +602,12 @@ const LandingPage = () => {
                     data-v-77b1cd82=""
                   >
                     <h2
-                      className="text-2xl text-center font-black tracking-tight text-gray-900 sm:text-4xl md:text-5xl md:leading-tight md:max-w-4xl md:mx-auto"
+                      className={`text-2xl text-center font-black tracking-tight ${
+                        isDark ? "text-white" : "text-gray-900"
+                      } 0 sm:text-4xl md:text-5xl md:leading-tight md:max-w-4xl md:mx-auto`}
                       data-v-77b1cd82=""
                     >
-                      Try Skill Scan today and streamline your recruitment
+                      Try Talent Scan today and streamline your recruitment
                       process
                       <span className="text-primary" data-v-77b1cd82="">
                         .
@@ -618,7 +624,7 @@ const LandingPage = () => {
                     data-v-app=""
                     //   hydrated=""
                   >
-                    <form className="grid gap-2 grid-cols-1 sm:w-full sm:flex sm:items-center sm:flex-wrap mt-6 sm:mt-12 sm:mx-auto sm:max-w-lg">
+                    {/* <form className="grid gap-2 grid-cols-1 sm:w-full sm:flex sm:items-center sm:flex-wrap mt-6 sm:mt-12 sm:mx-auto sm:max-w-lg">
                       <label htmlFor="cta-email" className="sr-only">
                         Email address
                       </label>
@@ -638,7 +644,7 @@ const LandingPage = () => {
                           Submit
                         </button>
                       </div>
-                    </form>
+                    </form> */}
                   </div>
                 </div>
               </div>
@@ -655,7 +661,7 @@ const LandingPage = () => {
       >
         <div className="container mx-auto flex justify-between items-center">
           <p>
-            Copyright © {new Date().getFullYear()} Skill Scan All Rights
+            Copyright © {new Date().getFullYear()} Talent Scan All Rights
             Reserved.
           </p>
           <div>

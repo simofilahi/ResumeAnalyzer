@@ -4,14 +4,11 @@ import Image from "next/image";
 const Logo = ({ size = 40, showTitle = true }) => {
   const [isDark] = useDarkMode();
   return (
-    <a
-      href="https://www.mixo.io/site/resume-analyzer-fbe4y"
-      className="flex items-center space-x-2"
-    >
+    <a href="/" className="flex items-center space-x-2">
       <Image
         className="w-auto"
-        src="/skillScan.png"
-        alt="skill Scan logo"
+        src="/talentscan.png"
+        alt="Talent Scan logo"
         width={size}
         height={size}
       />
@@ -22,7 +19,7 @@ const Logo = ({ size = 40, showTitle = true }) => {
               isDark ? "text-white" : "text-gray-900"
             } font-sans font-bold text-gray-900 text-2xl`}
           >
-            Talent Scan
+            TScan
           </p>
         </>
       )}

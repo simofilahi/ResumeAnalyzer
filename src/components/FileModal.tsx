@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 
 const Toast = ({ msg, show = false, delay = 5000, setShow }: any) => {
-  console.log({ show });
+  // console.log({ show });
   useEffect(() => {
     const interval = setInterval(() => {
       setShow();

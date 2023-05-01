@@ -19,4 +19,11 @@ const getData = (key: string) => {
   }
 };
 
-export { storeData, getData };
+const checkForSpecialChar = (text) => {
+  if (/[\&\!\?\.\.\.,]/g.test(text)) {
+    return true;
+  }
+  return false;
+};
+
+export { storeData, getData, checkForSpecialChar };

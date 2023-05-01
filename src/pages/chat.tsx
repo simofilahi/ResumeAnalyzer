@@ -16,70 +16,10 @@ import DarkModeToggle from "@src/components/darkModeToggle";
 import Logo from "@src/components/logo";
 import BuyMeCoffeeButton from "@src/components/buyMeCoffe";
 import Toast from "@src/components/FileModal";
+import { checkForSpecialChar } from "@src/utils";
 
 if (typeof window !== "undefined") {
   pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
-}
-
-function ServiceModal({ isOpen, onClose }) {
-  if (!isOpen) {
-    return null;
-  }
-
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen px-4">
-        <div className="fixed inset-0 transition-opacity">
-          <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-        </div>
-        <div
-          className="relative bg-white rounded-lg py-6 px-6 max-w-md w-full"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="modal-headline"
-        >
-          <div className="absolute top-0 right-0 mt-3 mr-3">
-            <button
-              className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-              onClick={onClose}
-            >
-              <span className="sr-only">Close</span>
-              <svg
-                className="h-6 w-6 fill-current"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M6.708 6.708a2 2 0 112.828 2.828L14.828 12l-5.293 5.293a2 2 0 11-2.828-2.828L12 9.172 6.708 3.88a2 2 0 010 2.828z" />
-              </svg>
-            </button>
-          </div>
-          <div className="text-center">
-            {/* <img src={petronImg} alt="Petron" className="h-48 mx-auto" /> */}
-            <h2 className="mt-4 text-lg font-medium text-gray-900">
-              Petron Fuel Services
-            </h2>
-            <p className="mt-2 text-gray-600">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis ac
-              risus leo. Vivamus euismod odio sed mauris faucibus, sit amet
-              consectetur quam fringilla. Nullam molestie elit vel justo
-              elementum, sit amet vulputate felis fermentum.
-            </p>
-          </div>
-          <div className="mt-6 flex justify-end">
-            <button
-              className="mr-2 bg-gray-200 rounded-lg px-4 py-2 text-gray-700"
-              onClick={onClose}
-            >
-              Close
-            </button>
-            <button className="bg-blue-600 rounded-lg px-4 py-2 text-white">
-              Book Now
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 function MyInput({
@@ -89,9 +29,10 @@ function MyInput({
   value,
   onChange,
   onKeyDown,
-  isDisabled,
-  scrollToBottom,
 }: any) {
+  const [file, setFile] = useState("");
+  const [toastMsg, setToastMsg] = useState("");
+
   const extractFromDoc = async (file: any) => {
     const result = await mammoth.convertToHtml({
       arrayBuffer: await file.arrayBuffer(),
@@ -100,14 +41,12 @@ function MyInput({
 
     handleUpload(text);
   };
-  const [file, setFile] = useState("");
-  const [toastMsg, setToastMsg] = useState("");
 
-  const extractTextFromPdf = () => {
+  const extractTextFromPdf = (file) => {
     const fileReader = new FileReader();
 
-    fileReader.onload = async () => {
-      const arrayBuffer = fileReader.result;
+    const handleContent = async () => {
+      const arrayBuffer = fileReader?.result;
       const pdfData = new Uint8Array(arrayBuffer);
       const pdfDocument = await pdfjs.getDocument({ data: pdfData }).promise;
 
@@ -120,7 +59,14 @@ function MyInput({
       }
 
       handleUpload(text);
-      // setPages(newPages);
+    };
+
+    fileReader.onload = async () => {
+      try {
+        handleContent();
+      } catch (e) {
+        handleContent();
+      }
     };
 
     fileReader.readAsArrayBuffer(file);
@@ -128,24 +74,17 @@ function MyInput({
 
   function checkFileSize(file) {
     if (file.size <= 5000000) {
-      // File size is below 5 MB
       return true;
     } else {
-      // File size is above 5 MB
       return false;
     }
   }
 
   const handleFileChange = (event: any) => {
+    event.preventDefault();
     const file = event.target.files[0];
     setToastMsg("");
     setFile(file);
-
-    const allowedTypes = [
-      "application/pdf",
-      "application/msword",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ];
 
     if (!checkFileSize(file)) {
       setToastMsg("File size exceeded. Please upload a file smaller than 5MB.");
@@ -155,7 +94,7 @@ function MyInput({
     if (!file) return;
 
     if (file && file.type === "application/pdf") {
-      extractTextFromPdf();
+      extractTextFromPdf(file);
     } else if (
       [
         "application/msword",
@@ -188,7 +127,7 @@ function MyInput({
             value={value}
             onChange={onChange}
             onKeyDown={onKeyDown}
-            disabled={isDisabled}
+            // disabled={!isDisabled}
           />
           <button
             className="absolute top-1/2 right-8 transform -translate-y-1/2 cursor-pointer"
@@ -218,32 +157,114 @@ function MyInput({
   );
 }
 
-function SlowText({ text, delay = 20, scrollToBottom }: any) {
-  const textRef = useRef(null);
+function SlowText({ text, scrollToBottom }: any) {
+  const textRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    const textArray = text.split("");
-    let current = 0;
-    let timer;
-
-    function showNextLetter() {
-      textRef.current.textContent += textArray[current];
+    if (!text) return;
+    const concat = (text) => {
+      if (checkForSpecialChar(text)) {
+        textRef.current.textContent =
+          textRef?.current?.textContent?.trim() + text + " ";
+      } else
+        textRef.current.textContent =
+          textRef?.current?.textContent + text + " ";
       scrollToBottom();
-      current++;
-      if (current === textArray.length) {
-        clearInterval(timer);
-      }
-    }
+    };
 
-    timer = setInterval(showNextLetter, delay);
+    setTimeout(() => {
+      try {
+        concat(text);
+      } catch (e) {}
+    }, 500);
+  }, [text]);
 
-    return () => clearInterval(timer);
-  }, [text, delay]);
-
-  return <div ref={textRef} />;
+  return <span ref={textRef}></span>;
 }
 
-function Messages({ darkMode, messages, scrollToBottom }: any) {
+function BotMessage({ message, scrollToBottom }: any) {
+  const [darkMode, setDarkMode] = useDarkMode();
+
+  return (
+    <div
+      key={message?.id}
+      className={`flex-none mt-4 p-8 ${
+        darkMode ? "bg-[#202123]" : "bg-white"
+      } ${darkMode ? "!text-white" : ""}`}
+    >
+      <div className="flex">
+        <div
+          className={`flex-shrink-0 ${
+            darkMode ? "bg-white" : "bg-[#E5E7EB]"
+          } rounded-full h-[50px] w-[50px]`}
+        >
+          <Image src="/talentscan.png" alt="Avatar" width={50} height={50} />
+        </div>
+        <div
+          className={`ml-4 ${
+            message?.isLoading && "flex justify-center items-center"
+          }`}
+        >
+          <p
+            className={`${
+              darkMode ? "!text-white" : "!text-gray-900"
+            }"  text-[1.020rem]`}
+          >
+            {message?.isLoading && (
+              <div
+                className={`w-[8px] h-6 cursor-blink  ${
+                  darkMode ? "bg-white" : "bg-[#1F2937]"
+                } `}
+              ></div>
+            )}
+
+            {message.isTyping && (
+              <SlowText text={message?.text} scrollToBottom={scrollToBottom} />
+            )}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const UserMessage = ({ message, scrollToBottom }: any) => {
+  const [darkMode] = useDarkMode();
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [message]);
+  return (
+    <div
+      key={message.id}
+      className={`flex-none  mt-4 p-8 ${
+        darkMode ? "bg-[#444654]" : "bg-[#F3F4F6]"
+      } ${darkMode ? "!text-white" : ""}`}
+    >
+      <div className="flex items-center">
+        <div
+          className={`flex-shrink-0 ${
+            darkMode ? "bg-white" : "bg-[#E5E7EB]"
+          } rounded-sm w-[50px] h-[50px]`}
+        >
+          <UserAvatar />
+        </div>
+
+        <div className="ml-4">
+          <p
+            className={`${
+              darkMode ? "text-white" : "text-gray-900"
+            }"  text-[1.020rem]`}
+          >
+            {message.text}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+function Messages({ messages, scrollToBottom }: any) {
   return (
     <div className="flex-grow flex flex-col  ">
       <div className="flex-grow overflow-auto absolute left-0 right-0">
@@ -251,115 +272,21 @@ function Messages({ darkMode, messages, scrollToBottom }: any) {
           {messages?.map((message: any) => {
             if (message.isUser) {
               return (
-                <div
-                  key={message.id}
-                  className={`flex-none  mt-4 p-8 ${
-                    darkMode ? "bg-[#444654]" : "bg-[#F3F4F6]"
-                  } ${darkMode ? "!text-white" : ""}`}
-                >
-                  <div className="flex items-center">
-                    <div
-                      className={`flex-shrink-0 ${
-                        darkMode ? "bg-white" : "bg-[#E5E7EB]"
-                      } rounded-sm w-[50px] h-[50px]`}
-                    >
-                      <UserAvatar />
-                    </div>
-
-                    <div className="ml-4">
-                      <p
-                        className={`${
-                          darkMode ? "text-white" : "text-gray-900"
-                        }"  text-[1.020rem]`}
-                      >
-                        {message.text}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <UserMessage
+                  message={message}
+                  scrollToBottom={scrollToBottom}
+                />
               );
             }
             return (
-              <div
-                key={message.id}
-                className={`flex-none mt-4 p-8 ${
-                  darkMode ? "bg-[#202123]" : "bg-white"
-                } ${darkMode ? "!text-white" : ""}`}
-              >
-                <div className="flex">
-                  <div
-                    className={`flex-shrink-0 ${
-                      darkMode ? "bg-white" : "bg-[#E5E7EB]"
-                    } rounded-full h-[50px] w-[50px]`}
-                  >
-                    <Image
-                      src="/skillScan.png"
-                      alt="Avatar"
-                      width={50}
-                      height={50}
-                    />
-                  </div>
-                  <div
-                    className={`ml-4 ${
-                      message.isLoading && "flex justify-center items-center"
-                    }`}
-                  >
-                    <p
-                      className={`${
-                        darkMode ? "text-white" : "text-gray-900"
-                      }"  text-[1.020rem]`}
-                    >
-                      {message.isLoading ? (
-                        <div
-                          className={`w-[8px] h-6 cursor-blink  ${
-                            darkMode ? "bg-white" : "bg-[#1F2937]"
-                          } `}
-                        ></div>
-                      ) : (
-                        <SlowText
-                          text={message.text}
-                          scrollToBottom={scrollToBottom}
-                        />
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <BotMessage message={message} scrollToBottom={scrollToBottom} />
             );
           })}
-          {/* Add more messages here */}
         </div>
       </div>
     </div>
   );
 }
-
-const BuyMeACoffee = () => {
-  return (
-    <div className="fixed bottom-0 right-0 mb-4 mr-4">
-      <a
-        href="https://www.buymeacoffee.com/yourusername"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-yellow-500 hover:bg-yellow-400 text-white py-2 px-4 rounded-full"
-      >
-        <svg
-          className="inline-block w-5 h-5 mr-2"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M18 3H2a1 1 0 00-1 1v11a1 1 0 001 1h16a1 1 0 001-1V4a1 1 0 00-1-1zm-1.464 7.64c-.041.041-.107.068-.157.068H3.62c-.05 0-.115-.027-.156-.068a.494.494 0 01-.092-.167l1.147-2.352A.505.505 0 014.098 8h.804a.5.5 0 01.391.193l.354.447a.5.5 0 00.391.193h5.385a.5.5 0 00.39-.193l.354-.447a.5.5 0 01.391-.193h.804a.506.506 0 01.374.121l1.148 2.352a.493.493 0 01-.092.167zM10 12.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"
-            clipRule="evenodd"
-          />
-        </svg>
-        Buy me a coffee
-      </a>
-    </div>
-  );
-};
 
 const UserAvatar = () => {
   return (
@@ -442,85 +369,119 @@ function Questions({ pickQuestion }: any) {
 function ChatPage() {
   const [darkMode, setDarkMode] = useDarkMode();
   const messagesEndRef = useRef(null);
-
+  const [botMessage, setBotMessage] = useState<any>("");
   const [messages, setMessages] = useState([
     {
-      text: "Hello there! I'm MindfulBot, your personal AI-powered chatbot for mental wellness. I'm here to provide evidence-based resources and support for managing stress, anxiety, depression, and more. How can I assist you today?",
+      text: "Hi there! I'm an AI-powered chatbot designed to assist you in streamlining your recruitment process. Simply upload a resume and I'll analyze it to provide a summary of the candidate's experience and skills, helping you to make informed hiring decisions",
       isUser: false,
       id: Date.now(),
+      isTyping: true,
       isLoading: false,
     },
   ]);
 
   const [message, setMessage] = useState("");
-  const [delay, setDelay] = useState<any>(0);
 
-  const [editable, setEditable] = useState(true);
-  const [responseCount, setResponseCount] = useState(0);
+  const {
+    data,
+    isLoading: apiIsLoading,
+    isError,
+    error,
+    ask,
+    isDone,
+  } = useChatGPT();
 
-  const { data, isLoading: apiIsLoading, isError, error, ask } = useChatGPT();
+  useEffect(() => {
+    const updateIsTyping = ({
+      messages,
+      messageId,
+      data,
+      isTypingStatus,
+      isLoading,
+    }: any) => {
+      const d = messages?.map((message) => {
+        if (message.id === messageId) {
+          return {
+            ...message,
+            isTyping: isTypingStatus,
+            isLoading: isLoading,
+            text: data,
+          };
+        }
+        return message;
+      });
+      return d;
+    };
+
+    if (apiIsLoading === true) {
+      let emptyMessage = {
+        text: "",
+        isLoading: true,
+        isTyping: false,
+        id: Date.now(),
+        isUser: false,
+      };
+
+      setMessages((messages) => [...messages, emptyMessage]);
+    } else if (
+      apiIsLoading === false &&
+      isDone === false &&
+      isError === false &&
+      data !== ""
+    ) {
+      const lastId = messages?.[messages.length - 1].id;
+
+      if (lastId) {
+        setMessages((messages) => [
+          ...updateIsTyping({
+            messages,
+            messageId: lastId,
+            data,
+            isTypingStatus: true,
+            isLoading: false,
+          }),
+        ]);
+      }
+      setBotMessage((prev) => {
+        if (checkForSpecialChar(data)) {
+          return prev?.trim() + data + " ";
+        }
+
+        return prev + data + " ";
+      });
+    } else if (apiIsLoading === false && isError === false && isDone === true) {
+      const lastId = messages?.[messages.length - 1];
+
+      if (lastId) {
+        setMessages((messages) =>
+          updateIsTyping({
+            messages,
+            messageId: lastId,
+            botMessage,
+            isTypingStatus: false,
+            isLoading: false,
+          })
+        );
+      }
+    }
+  }, [isDone, isError, apiIsLoading, data]);
 
   const handleUpload = async (text: string) => {
     await ask([{ role: "user", content: text }]);
   };
-
-  useEffect(() => {
-    setEditable(delay === 0);
-  }, [delay]);
-
-  useEffect(() => {
-    setEditable(apiIsLoading !== true);
-  }, [apiIsLoading]);
 
   const onInputChange = (e: any) => {
     const text = e.target.value;
     setMessage(text);
   };
 
-  useEffect(() => {
-    if (apiIsLoading === true) {
-      setMessages((messages) => [
-        ...messages,
-        {
-          text: "",
-          isUser: false,
-          id: Date.now(),
-          isLoading: true,
-        },
-      ]);
-    } else if (apiIsLoading === false && isError === false && data) {
-      const lastItemId = messages[messages.length - 1].id;
-      const handler = (messages: any) =>
-        messages?.map((message: any) => {
-          if (message.id === lastItemId) {
-            return {
-              text: data,
-              isUser: false,
-              id: Date.now(),
-              isLoading: false,
-            };
-          }
-          return message;
-        });
-      setMessages(handler);
-      const delay = data?.length * 20 + 500;
-      setDelay(delay);
-      setResponseCount((count) => count + 1);
-      try {
-        setTimeout(() => {
-          setDelay(0);
-        }, delay);
-      } catch (e) {}
-    }
-  }, [apiIsLoading, data, isError]);
-
   const scrollToBottom = () => {
     messagesEndRef.current.scrollTo(0, 4000);
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  // useEffect(() => {
+  //   scrollToBottom();
+  // }, [messages]);
 
   const transformer = (data: any) => {
     const dataPayload = data.map((d: any) => ({
@@ -553,7 +514,7 @@ function ChatPage() {
   };
 
   const pickQuestion = (text: string) => {
-    console.log({ text });
+    // console.log({ text });
     setMessage(text);
     SendMessageToBot(text);
   };
@@ -569,8 +530,10 @@ function ChatPage() {
       }`}
     >
       <Header />
-      <div className="h-full flex">
-        <div className="flex-grow flex flex-col max-w-[1400px] relative ml-auto mr-auto">
+      <div
+        className={` ${darkMode ? "bg-[#202123]" : "bg-[#F3F4F6]"} h-full flex`}
+      >
+        <div className=" flex-grow flex flex-col max-w-[1400px] relative ml-auto mr-auto">
           <div
             ref={messagesEndRef}
             className={`h-[68%] max-h-[68%] ${
@@ -579,6 +542,7 @@ function ChatPage() {
           >
             {/* Suggestion */}
             <Questions pickQuestion={pickQuestion} />
+
             {/* Chat messages */}
             <Messages
               darkMode={darkMode}
@@ -594,8 +558,8 @@ function ChatPage() {
             value={message}
             onChange={onInputChange}
             onKeyDown={handleKeyPress}
-            isDisabled={editable}
-            scrollToBottom={scrollToBottom}
+            // isDisabled={editable}
+            // scrollToBottom={scrollToBottom}
           />
         </div>
 
@@ -608,7 +572,8 @@ function ChatPage() {
             darkMode ? "text-white" : "text-gray-900"
           } font-semibold`}
         >
-          Copyright © {new Date().getFullYear()} All Rights Reserved.
+          Copyright © {new Date().getFullYear()} Talent Scan All Rights
+          Reserved.
         </footer>
       </div>
     </div>

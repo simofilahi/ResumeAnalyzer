@@ -8,7 +8,7 @@ const DarkModeProvider = ({ children }: any) => {
   const [isDark, setDark] = useState(false);
 
   const setIsDark = (isDark: boolean) => {
-    console.log({ isDark });
+    // console.log({ isDark });
     setDark((isDark) => {
       storeData("isDark", !isDark);
       return !isDark;
@@ -18,7 +18,7 @@ const DarkModeProvider = ({ children }: any) => {
   useEffect(() => {
     (function () {
       const value = getData("isDark");
-      console.log({ value });
+      // console.log({ value });
 
       if (value === "true") {
         setDark(true);

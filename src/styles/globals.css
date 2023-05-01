@@ -39,6 +39,11 @@ body {
   animation: cursor-blink 1s  infinite;
 }
 
+
+::-webkit-scrollbar {
+  display: none !important;
+}
+
 /* Track */
 ::-webkit-scrollbar {
   width: 8px;

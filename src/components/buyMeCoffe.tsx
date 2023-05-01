@@ -20,7 +20,7 @@ const SupportMessage = () => {
 const BuyMeCoffeeButton = () => {
   return (
     <a
-      href="https://www.buymeacoffee.com/example"
+      href="https://www.buymeacoffee.com/forudevapp"
       target="_blank"
       rel="noopener noreferrer"
       className="mx-4 flex flex-row item-center"

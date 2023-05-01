@@ -467,7 +467,21 @@ function ChatPage() {
   }, [isDone, isError, apiIsLoading, data]);
 
   const handleUpload = async (text: string) => {
-    await ask([{ role: "user", content: text }]);
+    const newMessages = [
+      ...messages,
+      {
+        text: text,
+        isLoading: false,
+        isTyping: false,
+        id: Date.now(),
+        isUser: true,
+      },
+    ];
+
+    setMessages(newMessages);
+    const messagesPayload = transformer(newMessages);
+    ask(messagesPayload);
+    // await ask([{ role: "user", content: text }]);
   };
 
   const onInputChange = (e: any) => {

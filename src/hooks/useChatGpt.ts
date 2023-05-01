@@ -25,22 +25,22 @@ const useChatGPT = () => {
           ...message,
           content:
             message.content +
-            ", You are virtual resume analyzer assistance for recruiters, never answer other topics ",
+            ", 'remark: You are virtual resume analyzer assistance for recruiters, never answer other topics",
         }));
 
         const payload = JSON.stringify({
-          model: "gpt-3.5-turbo",
+          model: "gpt-3.5-turbo-0301",
           messages: [
             {
               role: "system",
               content:
-                "You are virtual resume analyzer assistance for recruiters, never answer other topics ",
+                "You are virtual resume analyzer assistance for recruiters, never answer other topics",
             },
             ...newMessages,
           ],
-          max_tokens: 2000,
+          max_tokens: 1000,
           stream: true,
-          top_p: 0.8,
+          top_p: 0.2,
           n: 1,
           // stop: '.',
         });

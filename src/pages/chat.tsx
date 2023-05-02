@@ -182,7 +182,7 @@ function BotMessage({ message, scrollToBottom }: any) {
   const [darkMode, setDarkMode] = useDarkMode();
 
   const renderMessage = ({ isLoading, isTyping, message }) => {
-    const blinkCursor = (text = "") => (
+    const blinkCursor = () => (
       <div
         className={`w-[8px] h-6 cursor-blink  ${
           darkMode ? "bg-white" : "bg-[#1F2937]"
@@ -199,7 +199,6 @@ function BotMessage({ message, scrollToBottom }: any) {
 
   return (
     <div
-      key={message?.id}
       className={`flex-none mt-4 p-8 ${
         darkMode ? "bg-[#202123]" : "bg-white"
       } ${darkMode ? "!text-white" : ""}`}
@@ -240,9 +239,10 @@ const UserMessage = ({ message, scrollToBottom }: any) => {
   useEffect(() => {
     scrollToBottom();
   }, [message]);
+
+  console.log({ message });
   return (
     <div
-      key={message.id}
       className={`flex-none  mt-4 p-8 ${
         darkMode ? "bg-[#444654]" : "bg-[#F3F4F6]"
       } ${darkMode ? "!text-white" : ""}`}
@@ -281,13 +281,18 @@ function Messages({ messages, scrollToBottom }: any) {
             if (message.isUser) {
               return (
                 <UserMessage
+                  key={message.id}
                   message={message}
                   scrollToBottom={scrollToBottom}
                 />
               );
             }
             return (
-              <BotMessage message={message} scrollToBottom={scrollToBottom} />
+              <BotMessage
+                key={message.id}
+                message={message}
+                scrollToBottom={scrollToBottom}
+              />
             );
           })}
         </div>
@@ -362,7 +367,7 @@ function Questions({ pickQuestion }: any) {
           {questions.map((question, index) => (
             <button
               key={index}
-              className="bg-gray-200 rounded-full py-2 px-4 m-2"
+              className={`bg-gray-200 rounded-full py-2 px-4 m-2 text-black-700`}
               onClick={() => pickQuestion(question)}
             >
               {question}
@@ -383,7 +388,7 @@ function ChatPage() {
       text: "Hi there! I'm an AI-powered chatbot designed to assist you in streamlining your recruitment process. Simply upload a resume and I'll analyze it to provide a summary of the candidate's experience and skills, helping you to make informed hiring decisions",
       isUser: false,
       id: Date.now(),
-      isTyping: true,
+      isTyping: false,
       isLoading: false,
     },
   ]);
@@ -554,6 +559,8 @@ function ChatPage() {
   const onSendClick = () => {
     SendMessageToBot();
   };
+
+  console.log({ messages });
 
   return (
     <div

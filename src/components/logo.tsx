@@ -19,7 +19,7 @@ const Logo = ({ size = 40, showTitle = true }) => {
               isDark ? "text-white" : "text-gray-900"
             } font-sans font-bold text-gray-900 text-2xl`}
           >
-            TScan
+            TalentScan
           </p>
         </>
       )}

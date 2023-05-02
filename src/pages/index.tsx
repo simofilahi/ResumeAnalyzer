@@ -99,7 +99,7 @@ const LandingPage = () => {
                       <div>
                         <Link
                           href="/chat"
-                          className={`rounded-full  bg-black py-[14px] px-32 text-md text-white font-semibold`}
+                          className={`rounded-full  bg-black py-[12px] md:py-[14px] px-28 md:px-32 text-md text-white font-semibold`}
                           type="submit"
                         >
                           Try it free

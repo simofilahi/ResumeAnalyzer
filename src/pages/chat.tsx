@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 
 import { HiOutlineUpload } from "react-icons/hi";
 import { AiOutlineSend } from "react-icons/ai";
@@ -29,20 +29,22 @@ function MyInput({
   value,
   onChange,
   onKeyDown,
+  isDisabled,
 }: any) {
   const [file, setFile] = useState("");
+
   const [toastMsg, setToastMsg] = useState("");
 
-  const extractFromDoc = async (file: any) => {
+  const extractFromDoc = async (file: any, filename: string) => {
     const result = await mammoth.convertToHtml({
       arrayBuffer: await file.arrayBuffer(),
     });
     const text = result.value.replace(/<\/?[^>]+(>|$)/g, ""); // remove HTML tags
 
-    handleUpload(text);
+    handleUpload(text, filename);
   };
 
-  const extractTextFromPdf = (file) => {
+  const extractTextFromPdf = (file, filename: string) => {
     const fileReader = new FileReader();
 
     const handleContent = async () => {
@@ -58,7 +60,7 @@ function MyInput({
         text += pageText;
       }
 
-      handleUpload(text);
+      handleUpload(text, filename);
     };
 
     fileReader.onload = async () => {
@@ -83,6 +85,7 @@ function MyInput({
   const handleFileChange = (event: any) => {
     event.preventDefault();
     const file = event.target.files[0];
+    const fileName = event.target?.files[0]?.name;
     setToastMsg("");
     setFile(file);
 
@@ -94,14 +97,14 @@ function MyInput({
     if (!file) return;
 
     if (file && file.type === "application/pdf") {
-      extractTextFromPdf(file);
+      extractTextFromPdf(file, fileName);
     } else if (
       [
         "application/msword",
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
       ].includes(file.type)
     ) {
-      extractFromDoc(file);
+      extractFromDoc(file, fileName);
     } else {
       setToastMsg("Please select a PDF, DOC, or DOCX file.");
     }
@@ -127,7 +130,7 @@ function MyInput({
             value={value}
             onChange={onChange}
             onKeyDown={onKeyDown}
-            // disabled={!isDisabled}
+            disabled={!isDisabled}
           />
           <button
             className="absolute top-1/2 right-8 transform -translate-y-1/2 cursor-pointer"
@@ -158,32 +161,41 @@ function MyInput({
 }
 
 function SlowText({ text, scrollToBottom }: any) {
-  const textRef = useRef<HTMLSpanElement>(null);
+  const textRef = useRef<string>("");
 
   useEffect(() => {
     if (!text) return;
     const concat = (text) => {
       if (checkForSpecialChar(text)) {
-        textRef.current.textContent =
-          textRef?.current?.textContent?.trim() + text + " ";
-      } else
-        textRef.current.textContent =
-          textRef?.current?.textContent + text + " ";
+        textRef.current = textRef?.current?.trim?.() + text + " ";
+      } else textRef.current = textRef?.current + text + " ";
       scrollToBottom();
     };
 
-    setTimeout(() => {
-      try {
-        concat(text);
-      } catch (e) {}
-    }, 500);
+    concat(text);
   }, [text]);
 
-  return <span ref={textRef}></span>;
+  return <span dangerouslySetInnerHTML={{ __html: textRef?.current }}></span>;
 }
 
 function BotMessage({ message, scrollToBottom }: any) {
   const [darkMode, setDarkMode] = useDarkMode();
+
+  const renderMessage = ({ isLoading, isTyping, message }) => {
+    const blinkCursor = (text = "") => (
+      <div
+        className={`w-[8px] h-6 cursor-blink  ${
+          darkMode ? "bg-white" : "bg-[#1F2937]"
+        } `}
+      ></div>
+    );
+
+    if (isLoading && !isTyping) return blinkCursor();
+    else if (!isLoading && isTyping)
+      return <SlowText text={message} scrollToBottom={scrollToBottom} />;
+    return message;
+    // else if (!isLoading && !isTyping) return message;
+  };
 
   return (
     <div
@@ -210,17 +222,11 @@ function BotMessage({ message, scrollToBottom }: any) {
               darkMode ? "!text-white" : "!text-gray-900"
             }"  text-[1.020rem]`}
           >
-            {message?.isLoading && (
-              <div
-                className={`w-[8px] h-6 cursor-blink  ${
-                  darkMode ? "bg-white" : "bg-[#1F2937]"
-                } `}
-              ></div>
-            )}
-
-            {message.isTyping && (
-              <SlowText text={message?.text} scrollToBottom={scrollToBottom} />
-            )}
+            {renderMessage({
+              isLoading: message?.isLoading,
+              isTyping: message?.isTyping,
+              message: message?.text,
+            })}
           </p>
         </div>
       </div>
@@ -256,7 +262,9 @@ const UserMessage = ({ message, scrollToBottom }: any) => {
               darkMode ? "text-white" : "text-gray-900"
             }"  text-[1.020rem]`}
           >
-            {message.text}
+            {message?.isFileContent === true
+              ? message.filename + " file uploaded successfully"
+              : message.text}
           </p>
         </div>
       </div>
@@ -398,6 +406,7 @@ function ChatPage() {
       data,
       isTypingStatus,
       isLoading,
+      changeId,
     }: any) => {
       const d = messages?.map((message) => {
         if (message.id === messageId) {
@@ -406,6 +415,7 @@ function ChatPage() {
             isTyping: isTypingStatus,
             isLoading: isLoading,
             text: data,
+            id: changeId ? Date.now() : message.id,
           };
         }
         return message;
@@ -439,6 +449,7 @@ function ChatPage() {
             data,
             isTypingStatus: true,
             isLoading: false,
+            changeId: false,
           }),
         ]);
       }
@@ -450,31 +461,38 @@ function ChatPage() {
         return prev + data + " ";
       });
     } else if (apiIsLoading === false && isError === false && isDone === true) {
-      const lastId = messages?.[messages.length - 1];
+      const lastId = messages?.[messages.length - 1].id;
+
+      // console.log("before ", { botMessage });
 
       if (lastId) {
+        // console.log("after ", { botMessage });
         setMessages((messages) =>
           updateIsTyping({
             messages,
             messageId: lastId,
-            botMessage,
+            data: botMessage,
             isTypingStatus: false,
             isLoading: false,
+            changeId: true,
           })
         );
+        setBotMessage("");
       }
     }
   }, [isDone, isError, apiIsLoading, data]);
 
-  const handleUpload = async (text: string) => {
+  const handleUpload = async (text: string, filename = "") => {
     const newMessages = [
       ...messages,
       {
         text: text,
+        isFileContent: true,
         isLoading: false,
         isTyping: false,
         id: Date.now(),
         isUser: true,
+        filename: filename,
       },
     ];
 
@@ -572,7 +590,7 @@ function ChatPage() {
             value={message}
             onChange={onInputChange}
             onKeyDown={handleKeyPress}
-            // isDisabled={editable}
+            isDisabled={!(isDone === false && apiIsLoading === false)}
             // scrollToBottom={scrollToBottom}
           />
         </div>

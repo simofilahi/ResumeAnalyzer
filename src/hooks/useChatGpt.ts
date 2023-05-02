@@ -21,11 +21,12 @@ const useChatGPT = () => {
         setError(null);
         setData(null);
         setIsDone(false);
-        const newMessages = messages.map((message) => ({
+        const newMessages = messages.map((message, index) => ({
           ...message,
           content:
-            message.content +
-            ", 'remark: You are virtual resume analyzer assistance for recruiters, never answer other topics",
+            index === messages.length - 1
+              ? `message: ${message.content}, You are virtual candidate resume analyzer assistance for recruiters, if the message out of recruitment scop don't answer, except for hey, hello}`
+              : message.content,
         }));
 
         const payload = JSON.stringify({
@@ -34,13 +35,13 @@ const useChatGPT = () => {
             {
               role: "system",
               content:
-                "You are virtual resume analyzer assistance for recruiters, never answer other topics",
+                "You are virtual candidate resume analyzer assistance for recruiters",
             },
             ...newMessages,
           ],
           max_tokens: 1000,
           stream: true,
-          top_p: 0.2,
+          // top_p: 0.2,
           n: 1,
           // stop: '.',
         });

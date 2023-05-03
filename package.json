@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "./setup.sh && next build", 
+    "build": "./setup.sh && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -12,6 +12,7 @@
     "@types/node": "18.16.1",
     "@types/react": "18.2.0",
     "@types/react-dom": "18.2.1",
+    "@vercel/analytics": "^1.0.0",
     "autoprefixer": "10.4.14",
     "ignore-loader": "^0.1.2",
     "mammoth": "^1.5.1",

@@ -25,7 +25,7 @@ const useChatGPT = () => {
           ...message,
           content:
             index === messages.length - 1
-              ? `message: ${message.content}, You are virtual candidate resume analyzer assistance for recruiters, if the message out of recruitment scop don't answer, except for hey, hello}`
+              ? `message: ${message.content}, if the message out of recruitment scop don't answer, except for hey, hello}`
               : message.content,
         }));
 
@@ -35,7 +35,7 @@ const useChatGPT = () => {
             {
               role: "system",
               content:
-                "You are virtual candidate resume analyzer assistance for recruiters",
+                "You are virtual resume analyzer assistance that help only recruiters",
             },
             ...newMessages,
           ],

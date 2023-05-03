@@ -53,8 +53,7 @@ const LandingPage = () => {
           >
             <div className="max-w-md px-4 mx-auto sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl lg:grid lg:grid-cols-2 lg:gap-24">
               <div className="relative z-[1]">
-                <Logo />
-                <div className=" mt-8">
+                <div className="">
                   <div className=" sm:max-w-xl">
                     <h1
                       className={`text-4xl font-black tracking-tight ${

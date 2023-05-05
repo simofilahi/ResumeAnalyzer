@@ -99,10 +99,10 @@ const LandingPage = () => {
                       <div>
                         <Link
                           href="/chat"
-                          className={`rounded-full  bg-black py-[12px] md:py-[14px] px-28 md:px-32 text-md text-white font-semibold`}
+                          className={`rounded-full bg-orange-500 hover:bg-orange-700 shadow-md py-[12px] md:py-[14px] px-28 md:px-32 text-md md:text-xl xl:text-xxl text-white font-semibold`}
                           type="submit"
                         >
-                          Try it free
+                          Start Chat
                         </Link>
                       </div>
                       {/* </form> */}
@@ -114,18 +114,18 @@ const LandingPage = () => {
                       <img
                         src="https://storage.googleapis.com/mixo-files/public/img/avatars/female-12.png"
                         alt="Teresa Lia"
-                        className="object-cover inline-block mr-3 border-2 border-primary rounded-full sm:mr-2 h-14 w-14"
+                        className="object-cover inline-block mr-3 border-2 border-primary rounded-full sm:mr-2 h-10 w-10"
                       />
                       <div>
                         <p
-                          className={`sm:pl-2.5 text-base font-black tracking-tight ${
+                          className={`sm:pl-2.5  font-black tracking-tight ${
                             isDark ? "text-white" : "text-gray-800"
-                          }  sm:text-lg`}
+                          }  text-sm max-w-sm`}
                         >
                           ”Talent Scan has helped us save so much time in our
                           recruitment process, and the summaries are spot-on.”
                         </p>
-                        <p className="sm:pl-2.5 text-sm sm:text-base font-bold text-gray-500">
+                        <p className="sm:pl-2.5 text-base font-bold text-gray-500">
                           Teresa Lia
                         </p>
                       </div>

@@ -8,7 +8,7 @@ const Logo = ({ size = 40, showTitle = true }) => {
       <Image
         className="w-auto"
         src="/talentscan.png"
-        alt="Talent Scan logo"
+        alt="TalentScan logo"
         width={size}
         height={size}
       />

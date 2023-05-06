@@ -521,79 +521,79 @@ const LandingPage = () => {
                     <img
                       src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                       alt="User ben"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=100&q=80"
                       alt="User beth"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
-                      src="https://images.unsplash.com/photo-1528892952291-009c663ce843?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=344&q=80"
+                      src="https://images.unsplash.com/photo-1598257006463-7c64a5a538cc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
                       alt="User claire"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1554727242-741c14fa561c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                       alt="User iwan"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80"
                       alt="User lori"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1531123414780-f74242c2b052?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                       alt="User mali"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2187&q=80"
                       alt="User mi"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1595211877493-41a4e5f236b3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=715&q=80"
                       alt="User nim"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDR8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
                       alt="User san"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1566218546931-cd8f7ce1deb0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                       alt="User sanjid"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                       alt="User steph"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1548661211-e559d8c17537?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDd8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=600&q=60"
                       alt="User zak"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                     <img
                       src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80"
                       alt="User judith"
-                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-fill"
+                      className="user-avatar rounded-full h-8 w-8 mx-2 md:h-12 md:w-12 object-cover object-top"
                       data-v-77b1cd82=""
                     />
                   </div>

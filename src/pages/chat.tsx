@@ -260,7 +260,7 @@ const UserMessage = ({ message, scrollToBottom }: any) => {
           <p
             className={`${
               darkMode ? "text-white" : "text-gray-900"
-            }"  text-[1.020rem]`}
+            }  text-[1.020rem]`}
           >
             {message?.isFileContent === true
               ? message.filename + " file uploaded successfully"

@@ -6,9 +6,174 @@ import Image from "next/image";
 import { FiMoon, FiSun } from "react-icons/fi";
 import Logo from "@src/components/logo";
 import BuyMeCoffeeButton from "@src/components/buyMeCoffe";
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 
-const Header = () => {
-  return <div className="fixed top-0 h-10 w-full bg-red-500"></div>;
+import { useState } from "react";
+
+function ContactForm() {
+  const [name, setName] = useState<any>("");
+  const [email, setEmail] = useState<any>("");
+  const [message, setMessage] = useState<any>("");
+  const [errors, setErrors] = useState<any>({});
+  const [isDark] = useDarkMode();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate form inputs
+    const errors = {};
+    if (!name.trim()) {
+      errors.name = "Name is required";
+    }
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = "Email is invalid";
+    }
+    if (!message.trim()) {
+      errors.message = "Message is required";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setErrors(errors);
+      return;
+    }
+
+    // Submit form data to server
+    console.log({ name, email, message });
+
+    // Reset form inputs and errors
+    setName("");
+    setEmail("");
+    setMessage("");
+    setErrors({});
+  };
+
+  return (
+    <section className="flex max-w-[1400px] flex-col">
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label
+            htmlFor="name"
+            className={`block ${
+              isDark ? "text-white" : "text-gray-700"
+            } font-semibold mb-2`}
+          >
+            Name <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={`w-full px-3 py-2 border ${
+              errors.name ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent`}
+          />
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="email"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Email <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={`w-full px-3 py-2 border ${
+              errors.email ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent`}
+          />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
+        </div>
+        <div className="mb-4">
+          <label
+            htmlFor="message"
+            className="block text-gray-700 font-semibold mb-2"
+          >
+            Message <span className="text-red-500">*</span>
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            className={`w-full px-3 py-2 border ${
+              errors.message ? "border-red-500" : "border-gray-300"
+            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent`}
+            rows="4"
+          />
+          {errors.message && (
+            <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+          )}
+        </div>
+        <button
+          type="submit"
+          className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+        >
+          Send Message
+        </button>
+      </form>
+    </section>
+  );
+}
+
+const Footer = () => {
+  const [isDark] = useDarkMode();
+  return (
+    <footer
+      className={`${
+        isDark
+          ? "bg-[#202123] border-[#444654] text-white"
+          : "text-gray-900 bg-white border-gray-200"
+      }  font-semibold py-4 px-6 border-t`}
+    >
+      <div className="container mx-auto flex flex-col  justify-between items-center md:flex-row">
+        <div className="flex-row md:my-0 my-2 flex justify-center items-center">
+          {/* <Link href="#">
+            <FaFacebook className="text-xl mr-4 hover:text-gray-400" />
+          </Link>
+          <Link href="#">
+            <FaTwitter className="text-xl mr-4 hover:text-gray-400" />
+          </Link> */}
+          <Link href="https://www.linkedin.com/company/talent-scan">
+            <FaLinkedin
+              size={32}
+              className="text-xl mr-4 hover:text-gray-400"
+            />
+          </Link>
+          <Link href={"https://www.linkedin.com/company/talent-scan"}>
+            Linkedin{" "}
+          </Link>
+          {/* <Link href="#">
+            <FaInstagram className="text-xl hover:text-gray-400" />
+          </Link> */}
+        </div>
+        <p className="md:my-0 my-2 text-center md:text-start">
+          Copyright © {new Date().getFullYear()} Talent Scan All Rights
+          Reserved.
+        </p>
+        <div className="md:my-0 my-2 text-center md:text-start">
+          <a href="#" className="mr-4 hover:text-gray-400">
+            Terms of Use
+          </a>
+          <a href="#" className="hover:text-gray-400">
+            Privacy Policy
+          </a>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 const LandingPage = () => {
@@ -340,7 +505,6 @@ const LandingPage = () => {
             site-name="Resume Analyzer"
             site-id="6hdJYjD7ces5HzWSl0KM"
             site-logo-url="https://storage.googleapis.com/mixo-files/logos/resumeAnalyzer-1682767628468.svg"
-            site-url="https://www.mixo.io/site/resume-analyzer-fbe4y"
             site-logo-size="md"
             hide-site-name="false"
             reselecting-images="false"
@@ -394,26 +558,6 @@ const LandingPage = () => {
                       Analyzer."
                     </p>
                   </div>
-                  <footer className="mt-8">
-                    <div className="md:flex md:items-center md:justify-center">
-                      <div className="md:flex-shrink-0">
-                        <img
-                          src="https://storage.googleapis.com/mixo-files/public/img/avatars/female-6.png"
-                          className="w-10 h-10 mx-auto border-2 border-slate-200 rounded-full shadow-sm object-cover"
-                          alt="Testimonial"
-                        />
-                      </div>
-                      <div className="mt-3 text-center md:mt-0 md:ml-3 md:flex md:items-center text-shadow-sm">
-                        <div
-                          className={`text-lg font-medium ${
-                            isDark ? "text-white" : "text-gray-500"
-                          } `}
-                        >
-                          Rosa Tinkler
-                        </div>
-                      </div>
-                    </div>
-                  </footer>
                 </blockquote>
               </div>
             </div>
@@ -426,7 +570,6 @@ const LandingPage = () => {
             //   sortorder="4"
             site-name="Resume Analyzer"
             site-logo-url="https://storage.googleapis.com/mixo-files/logos/resumeAnalyzer-1682767628468.svg"
-            site-url="https://www.mixo.io/site/resume-analyzer-fbe4y"
             site-logo-size="md"
             hide-site-name="false"
             reselecting-images="false"
@@ -650,30 +793,10 @@ const LandingPage = () => {
               </div>
             </div>
           </section>
+          {/* <ContactForm /> */}
         </div>
       </div>
-      <footer
-        className={`${
-          isDark
-            ? "bg-[#202123] border-[#444654] text-white"
-            : "text-gray-900 bg-white border-gray-200"
-        }  font-semibold py-4 px-6 border-t`}
-      >
-        <div className="container mx-auto flex justify-between items-center">
-          <p>
-            Copyright © {new Date().getFullYear()} Talent Scan All Rights
-            Reserved.
-          </p>
-          <div>
-            <a href="#" className="mr-4 hover:text-gray-400">
-              Terms of Use
-            </a>
-            <a href="#" className="hover:text-gray-400">
-              Privacy Policy
-            </a>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

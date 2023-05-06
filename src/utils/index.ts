@@ -20,7 +20,7 @@ const getData = (key: string) => {
 };
 
 const checkForSpecialChar = (text) => {
-  if (/[\&\!\?\.\.\.,]/g.test(text)) {
+  if (/[\&\!\?\:\.\.\.,]/g.test(text)) {
     return true;
   }
   return false;

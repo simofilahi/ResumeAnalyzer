@@ -218,8 +218,8 @@ function BotMessage({ message, scrollToBottom }: any) {
         >
           <p
             className={`${
-              darkMode ? "!text-white" : "!text-gray-900"
-            }"  text-[1.020rem]`}
+              darkMode ? "text-white" : "text-gray-900"
+            }  text-[1.020rem]`}
           >
             {renderMessage({
               isLoading: message?.isLoading,
@@ -358,7 +358,7 @@ function Questions({ pickQuestion }: any) {
       <div className="flex-none">
         <p
           className={`${
-            darkMode ? "text-white" : "text-black-700"
+            darkMode ? "text-white" : "text-gray-700"
           } font-bold mb-4`}
         >
           Suggested Questions
@@ -367,7 +367,7 @@ function Questions({ pickQuestion }: any) {
           {questions.map((question, index) => (
             <button
               key={index}
-              className={`bg-gray-200 rounded-full py-2 px-4 m-2 text-black-700`}
+              className={`bg-gray-200 rounded-full py-2 px-4 m-2 text-gray-700`}
               onClick={() => pickQuestion(question)}
             >
               {question}

@@ -39,7 +39,7 @@ function MyInput({
     const result = await mammoth.convertToHtml({
       arrayBuffer: await file.arrayBuffer(),
     });
-    const text = result.value.replace(/<\/?[^>]+(>|$)/g, ""); // remove HTML tags
+    const text = result.value.replace(/^ +| +$/g, ""); // remove HTML tags
 
     handleUpload(text, filename);
   };
@@ -167,7 +167,7 @@ function SlowText({ text, scrollToBottom }: any) {
     if (!text) return;
     const concat = (text) => {
       if (checkForSpecialChar(text)) {
-        textRef.current = textRef?.current?.trim?.() + text + " ";
+        textRef.current = textRef?.current + text + " ";
       } else textRef.current = textRef?.current + text + " ";
       scrollToBottom();
     };
@@ -175,7 +175,12 @@ function SlowText({ text, scrollToBottom }: any) {
     concat(text);
   }, [text]);
 
-  return <span dangerouslySetInnerHTML={{ __html: textRef?.current }}></span>;
+  return (
+    <span
+      className="whitespace-pre-line "
+      dangerouslySetInnerHTML={{ __html: textRef?.current }}
+    ></span>
+  );
 }
 
 function BotMessage({ message, scrollToBottom }: any) {
@@ -219,7 +224,7 @@ function BotMessage({ message, scrollToBottom }: any) {
           <p
             className={`${
               darkMode ? "text-white" : "text-gray-900"
-            }  text-[1.020rem]`}
+            }  text-[1.020rem] whitespace-pre-line`}
           >
             {renderMessage({
               isLoading: message?.isLoading,
@@ -240,7 +245,7 @@ const UserMessage = ({ message, scrollToBottom }: any) => {
     scrollToBottom();
   }, [message]);
 
-  console.log({ message });
+  // console.log({ message });
   return (
     <div
       className={`flex-none  mt-4 p-8 ${
@@ -260,7 +265,7 @@ const UserMessage = ({ message, scrollToBottom }: any) => {
           <p
             className={`${
               darkMode ? "text-white" : "text-gray-900"
-            }  text-[1.020rem]`}
+            }  text-[1.020rem] whitespace-pre-line`}
           >
             {message?.isFileContent === true
               ? message.filename + " file uploaded successfully"
@@ -278,6 +283,7 @@ function Messages({ messages, scrollToBottom }: any) {
       <div className="flex-grow overflow-auto absolute left-0 right-0">
         <div className="flex flex-col">
           {messages?.map((message: any) => {
+            // console.log({ message });
             if (message.isUser) {
               return (
                 <UserMessage
@@ -405,6 +411,7 @@ function ChatPage() {
   } = useChatGPT();
 
   useEffect(() => {
+    // console.log("outside", { data });
     const updateIsTyping = ({
       messages,
       messageId,
@@ -444,6 +451,7 @@ function ChatPage() {
       isError === false &&
       data !== ""
     ) {
+      // console.log("inside", { data });
       const lastId = messages?.[messages.length - 1].id;
 
       if (lastId) {
@@ -460,7 +468,8 @@ function ChatPage() {
       }
       setBotMessage((prev) => {
         if (checkForSpecialChar(data)) {
-          return prev?.trim() + data + " ";
+          const d = prev?.replace(/^ +| +$/g, "");
+          return d + data + " ";
         }
 
         return prev + data + " ";
@@ -560,7 +569,7 @@ function ChatPage() {
     SendMessageToBot();
   };
 
-  console.log({ messages });
+  // console.log({ messages });
 
   return (
     <div

@@ -25,12 +25,12 @@ const useChatGPT = () => {
           ...message,
           content:
             index === messages.length - 1
-              ? `message: ${message.content}, if the message out of recruitment scop don't answer, except for hey, hello}`
+              ? `message: "${message.content}", Please only provide a response related to recruitment by offering assistance in analyzing candidates' resumes for recruiters. your response should be well-formatted"`
               : message.content,
         }));
 
         const payload = JSON.stringify({
-          model: "gpt-3.5-turbo-0301",
+          model: "gpt-3.5-turbo",
           messages: [
             {
               role: "system",
@@ -39,7 +39,7 @@ const useChatGPT = () => {
             },
             ...newMessages,
           ],
-          max_tokens: 1000,
+          max_tokens: 2000,
           stream: true,
           // top_p: 0.2,
           n: 1,
@@ -59,11 +59,14 @@ const useChatGPT = () => {
             // console.log({ payload });
             let text = payload?.choices?.[0]?.delta?.content;
 
-            if (text !== "\n") {
-              const textWithoutSpaces = text?.trim();
-              // console.log({ textWithoutSpaces });
-              setData(textWithoutSpaces);
-            }
+            // if (text) {
+            // console.log({ text });
+            // const textWithoutSpaces = text?.trim(" ");
+            text = text?.split(" ").join("") || "";
+            // console.log({ text });
+            // console.log({ textWithoutSpaces });
+            setData(text);
+            // }
           } else {
             setIsDone(true);
             source.close();

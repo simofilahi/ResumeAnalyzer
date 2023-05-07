@@ -50,79 +50,104 @@ function ContactForm() {
   };
 
   return (
-    <section className="flex max-w-[1400px] flex-col">
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label
-            htmlFor="name"
-            className={`block ${
-              isDark ? "text-white" : "text-gray-700"
-            } font-semibold mb-2`}
-          >
-            Name <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className={`w-full px-3 py-2 border ${
-              errors.name ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent`}
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="email"
-            className="block text-gray-700 font-semibold mb-2"
-          >
-            Email <span className="text-red-500">*</span>
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className={`w-full px-3 py-2 border ${
-              errors.email ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent`}
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-          )}
-        </div>
-        <div className="mb-4">
-          <label
-            htmlFor="message"
-            className="block text-gray-700 font-semibold mb-2"
-          >
-            Message <span className="text-red-500">*</span>
-          </label>
-          <textarea
-            id="message"
-            name="message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            className={`w-full px-3 py-2 border ${
-              errors.message ? "border-red-500" : "border-gray-300"
-            } rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent`}
-            rows="4"
-          />
-          {errors.message && (
-            <p className="text-red-500 text-sm mt-1">{errors.message}</p>
-          )}
-        </div>
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+    <section className="flex max-w-[1400px] flex-col items-center justify-center pb-20">
+      <form
+        className="w-[90%] justify-center flex items-center flex-col"
+        onSubmit={handleSubmit}
+      >
+        <p
+          className={`block ${
+            isDark ? "text-white" : "text-gray-700"
+          } font-semibold mb-2 pt-4 text-center text-4xl`}
         >
-          Send Message
-        </button>
+          Contact us
+        </p>
+        <p
+          className={`py-4 text-md leading-relaxed ${
+            isDark ? "text-white" : "text-gray-700"
+          }  max-w-xl text-center `}
+        >
+          If you have any specific questions or would like to discuss how our
+          chat page can help you in analyzing resumes, please fill out the form
+          below, and we'll get back to you as soon as possible
+        </p>
+        <div className="flex w-full flex-col">
+          <div className="mb-8">
+            <label
+              htmlFor="name"
+              className={`block ${
+                isDark ? "text-white" : "text-gray-700"
+              } font-semibold mb-2`}
+            >
+              Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className={`w-full px-3 py-2 border ${
+                errors.name ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent`}
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+            )}
+          </div>
+          <div className="mb-8">
+            <label
+              htmlFor="email"
+              className={`block ${
+                isDark ? "text-white" : "text-gray-700"
+              } font-semibold mb-2`}
+            >
+              Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`w-full px-3 py-2 border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent`}
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
+          </div>
+          <div className="mb-6">
+            <label
+              htmlFor="message"
+              className={`block ${
+                isDark ? "text-white" : "text-gray-700"
+              } font-semibold mb-2`}
+            >
+              Message <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className={`w-full px-3 py-2 border ${
+                errors.message ? "border-red-500" : "border-gray-300"
+              } rounded-md focus:outline-none focus:ring-2 focus:ring-orange-600 focus:border-transparent`}
+              rows="4"
+            />
+            {errors.message && (
+              <p className="text-red-500 text-sm mt-1">{errors.message}</p>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="px-4 py-[10px] self-start bg-orange-500 text-white font-semibold rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-600 focus:ring-opacity-50"
+          >
+            Send Message
+          </button>
+        </div>
       </form>
     </section>
   );
@@ -264,7 +289,7 @@ const LandingPage = () => {
                       <div>
                         <Link
                           href="/chat"
-                          className={`rounded-full bg-orange-500 hover:bg-orange-700 shadow-md py-[12px] md:py-[14px] px-28 md:px-32 text-md md:text-xl xl:text-xxl text-white font-semibold`}
+                          className={`rounded-md bg-orange-500 hover:bg-orange-700 shadow-md py-[10px]  px-28 md:px-32 text-md md:text-xl xl:text-xxl text-white font-semibold`}
                           type="submit"
                         >
                           Start Chat
@@ -745,9 +770,9 @@ const LandingPage = () => {
                     data-v-77b1cd82=""
                   >
                     <h2
-                      className={`text-2xl text-center font-black tracking-tight ${
+                      className={`text-sm text-center font-black tracking-tight ${
                         isDark ? "text-white" : "text-gray-900"
-                      } 0 sm:text-4xl md:text-5xl md:leading-tight md:max-w-4xl md:mx-auto`}
+                      } 0 sm:text-2xl md:text-4xl md:leading-tight md:max-w-4xl md:mx-auto`}
                       data-v-77b1cd82=""
                     >
                       Try Talent Scan today and streamline your recruitment

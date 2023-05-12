@@ -14,7 +14,7 @@ const useChatGPT = () => {
   const [error, setError] = useState<any>(null);
 
   const ask = (messages: Array<any>) => {
-    const fetchIntention = async () => {
+    const Fetch = async () => {
       try {
         setIsLoading(true);
         setIsError(false);
@@ -50,8 +50,11 @@ const useChatGPT = () => {
           Authorization: `Bearer ${API_KEY}`,
         };
 
+        console.log("before ====> ");
+
         const source = SSE(chatGPTUrl, { headers, payload, method: "POST" });
 
+        console.log("after ====> ");
         source.addEventListener("message", (event) => {
           setIsLoading(false);
           if (event.data !== "[DONE]") {
@@ -100,13 +103,13 @@ const useChatGPT = () => {
         // setIsLoading(false);
         // setData(analyzedIntention);
       } catch (e) {
-        // console.log({ e });
+        console.log({ e });
         setIsError(true);
         setIsLoading(false);
         setError("Error!, Please try again");
       }
     };
-    fetchIntention();
+    Fetch();
   };
 
   return { data, isLoading, isError, error, ask, isDone };

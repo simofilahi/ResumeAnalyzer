@@ -1,6 +1,5 @@
 var SSE = function (url, options) {
   if (!(this instanceof SSE)) {
-    alert({ chunk: this.chunk });
     return new SSE(url, options);
   }
 

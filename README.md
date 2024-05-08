@@ -7,4 +7,3 @@ Free resume analyzer tool powerd by AI chatgpt api.
 ReactJs,
 Tailwind.
 
-
